@@ -1,89 +1,7 @@
-import { GoogleGenAI, Modality, Type } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import { StudyItem } from "../types";
 
-// Helper for Base64 decoding for Audio
-function decode(base64: string) {
-  const binaryString = atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
-}
-
-async function decodeAudioData(
-  data: Uint8Array,
-  ctx: AudioContext,
-  sampleRate: number,
-  numChannels: number,
-): Promise<AudioBuffer> {
-  const dataInt16 = new Int16Array(data.buffer);
-  const frameCount = dataInt16.length / numChannels;
-  const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
-
-  for (let channel = 0; channel < numChannels; channel++) {
-    const channelData = buffer.getChannelData(channel);
-    for (let i = 0; i < frameCount; i++) {
-      channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
-    }
-  }
-  return buffer;
-}
-
-export const playGeminiTTS = async (text: string, apiKey: string): Promise<void> => {
-  if (!apiKey) {
-    console.warn("No API key provided for TTS. Falling back to browser speech synthesis.");
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    window.speechSynthesis.speak(utterance);
-    return;
-  }
-
-  try {
-    const ai = new GoogleGenAI({ apiKey });
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: text }] }],
-      config: {
-        responseModalities: [Modality.AUDIO],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Kore' },
-          },
-        },
-      },
-    });
-
-    const outputAudioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-    const outputNode = outputAudioContext.createGain();
-    outputNode.connect(outputAudioContext.destination);
-
-    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    
-    if (!base64Audio) throw new Error("No audio data received from Gemini");
-
-    const audioBuffer = await decodeAudioData(
-      decode(base64Audio),
-      outputAudioContext,
-      24000,
-      1,
-    );
-    
-    const source = outputAudioContext.createBufferSource();
-    source.buffer = audioBuffer;
-    source.connect(outputNode);
-    source.start();
-
-  } catch (error) {
-    console.error("Gemini TTS Error:", error);
-    // Fallback
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    window.speechSynthesis.speak(utterance);
-  }
-};
-
+// Parsing service remains using Gemini (requires API Key)
 export const parseContentWithGemini = async (rawText: string, apiKey: string): Promise<StudyItem[]> => {
   if (!apiKey) throw new Error("API Key required for content processing");
 
@@ -134,4 +52,56 @@ export const parseContentWithGemini = async (rawText: string, apiKey: string): P
     nextReviewDate: Date.now(),
     easeFactor: 2.5
   }));
+};
+
+// TTS Service using Web Speech API (Accessible in China, Offline, Low Latency)
+export const playAudio = (text: string): void => {
+  if (!window.speechSynthesis) {
+    console.warn("Web Speech API not supported");
+    return;
+  }
+
+  // Cancel any currently playing speech to avoid queue buildup
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  utterance.rate = 0.85; // Slightly slower for language learning clarity
+  utterance.pitch = 1.0;
+
+  // Attempt to select a high-quality voice
+  const loadVoicesAndSpeak = () => {
+    const voices = window.speechSynthesis.getVoices();
+    
+    // Priority: 
+    // 1. Google US English (Chrome)
+    // 2. Microsoft Zira/David (Edge/Windows)
+    // 3. Samantha (macOS)
+    // 4. Any 'en-US'
+    // 5. Any 'en'
+    
+    const preferredVoice = 
+      voices.find(v => v.name === 'Google US English') ||
+      voices.find(v => v.name.includes('Microsoft Zira')) ||
+      voices.find(v => v.name.includes('Samantha')) ||
+      voices.find(v => v.lang === 'en-US' && !v.localService) || // Online voices are usually better
+      voices.find(v => v.lang === 'en-US') ||
+      voices.find(v => v.lang.startsWith('en'));
+
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Chrome loads voices asynchronously
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      loadVoicesAndSpeak();
+      window.speechSynthesis.onvoiceschanged = null; // Remove listener
+    };
+  } else {
+    loadVoicesAndSpeak();
+  }
 };

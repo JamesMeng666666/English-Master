@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StudyItem, StudyMode, ReviewGrade } from './types';
 import { DEFAULT_STUDY_DATA, INTERVALS } from './constants';
-import { parseContentWithGemini, playGeminiTTS } from './services/geminiService';
+import { parseContentWithGemini, playAudio } from './services/geminiService';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
 import ApiKeyModal from './components/ApiKeyModal';
@@ -131,7 +131,7 @@ function App() {
   };
 
   const handlePlayAudio = (text: string) => {
-    playGeminiTTS(text, apiKey);
+    playAudio(text);
   };
 
   return (
