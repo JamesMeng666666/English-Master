@@ -1,5 +1,5 @@
 {
-  "name": "English Master",
+  "name": "Phrase Master",
   "description": "An intelligent memory aid application using the Ebbinghaus Forgetting Curve. Features AI-powered flashcards, high-quality TTS pronunciation, and smart fill-in-the-blank quizzes based on custom study materials.",
   "requestFramePermissions": []
 }

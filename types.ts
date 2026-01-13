@@ -9,7 +9,8 @@ export enum StudyMode {
   FLASHCARD = 'FLASHCARD',
   QUIZ = 'QUIZ',
   INPUT = 'INPUT',
-  DASHBOARD = 'DASHBOARD'
+  DASHBOARD = 'DASHBOARD',
+  LIST = 'LIST'
 }
 
 export type ReviewGrade = 'AGAIN' | 'HARD' | 'GOOD' | 'EASY';

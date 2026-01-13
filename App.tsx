@@ -4,6 +4,7 @@ import { DEFAULT_STUDY_DATA, INTERVALS } from './constants';
 import { parseContentWithGemini, playAudio } from './services/geminiService';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
+import VocabularyList from './components/VocabularyList';
 import ApiKeyModal from './components/ApiKeyModal';
 
 function App() {
@@ -134,6 +135,12 @@ function App() {
     playAudio(text);
   };
 
+  const handleDeleteItem = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+        setStudyData(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
   return (
     <div className="h-full flex flex-col bg-gray-50">
       <ApiKeyModal 
@@ -188,21 +195,21 @@ function App() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <button
                 onClick={() => {
                     setMode(StudyMode.FLASHCARD);
                     setCurrentCardIndex(0);
                 }}
                 disabled={stats.due === 0}
-                className="bg-primary hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-8 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-4 group"
+                className="bg-primary hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-8 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col items-center justify-center gap-4 group text-center"
               >
                 <div className="bg-white/20 p-4 rounded-full">
                     <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 </div>
-                <div className="text-left">
-                    <h3 className="text-xl font-bold">Start Review</h3>
-                    <p className="text-blue-100 text-sm">Review {stats.due} cards due today</p>
+                <div>
+                    <h3 className="text-xl font-bold">Review Cards</h3>
+                    <p className="text-blue-100 text-sm mt-1">{stats.due} items due</p>
                 </div>
               </button>
 
@@ -211,14 +218,27 @@ function App() {
                     setMode(StudyMode.QUIZ);
                     setCurrentCardIndex(0);
                 }}
-                className="bg-secondary hover:bg-emerald-600 text-white p-8 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-4"
+                className="bg-secondary hover:bg-emerald-600 text-white p-8 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col items-center justify-center gap-4 text-center"
               >
                  <div className="bg-white/20 p-4 rounded-full">
                     <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 </div>
-                 <div className="text-left">
-                    <h3 className="text-xl font-bold">Take Quiz</h3>
-                    <p className="text-green-100 text-sm">Fill-in-the-blank practice</p>
+                 <div>
+                    <h3 className="text-xl font-bold">Practice Quiz</h3>
+                    <p className="text-green-100 text-sm mt-1">Fill-in-the-blanks</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setMode(StudyMode.LIST)}
+                className="bg-gray-800 hover:bg-gray-900 text-white p-8 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col items-center justify-center gap-4 text-center"
+              >
+                 <div className="bg-white/20 p-4 rounded-full">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                </div>
+                 <div>
+                    <h3 className="text-xl font-bold">View List</h3>
+                    <p className="text-gray-300 text-sm mt-1">Show all {stats.total} items</p>
                 </div>
               </button>
             </div>
@@ -317,6 +337,18 @@ function App() {
                 </div>
              )}
           </div>
+        )}
+        
+        {/* List Mode */}
+        {mode === StudyMode.LIST && (
+            <div className="w-full flex justify-center p-4 h-full">
+                <VocabularyList 
+                    items={studyData} 
+                    onBack={() => setMode(StudyMode.DASHBOARD)}
+                    onPlayAudio={handlePlayAudio}
+                    onDelete={handleDeleteItem}
+                />
+            </div>
         )}
 
       </main>
