@@ -54,54 +54,23 @@ export const parseContentWithGemini = async (rawText: string, apiKey: string): P
   }));
 };
 
-// TTS Service using Web Speech API (Accessible in China, Offline, Low Latency)
+// TTS Service using Youdao API (Human-like, Accessible in China)
 export const playAudio = (text: string): void => {
-  if (!window.speechSynthesis) {
-    console.warn("Web Speech API not supported");
-    return;
-  }
-
-  // Cancel any currently playing speech to avoid queue buildup
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'en-US';
-  utterance.rate = 0.85; // Slightly slower for language learning clarity
-  utterance.pitch = 1.0;
-
-  // Attempt to select a high-quality voice
-  const loadVoicesAndSpeak = () => {
-    const voices = window.speechSynthesis.getVoices();
-    
-    // Priority: 
-    // 1. Google US English (Chrome)
-    // 2. Microsoft Zira/David (Edge/Windows)
-    // 3. Samantha (macOS)
-    // 4. Any 'en-US'
-    // 5. Any 'en'
-    
-    const preferredVoice = 
-      voices.find(v => v.name === 'Google US English') ||
-      voices.find(v => v.name.includes('Microsoft Zira')) ||
-      voices.find(v => v.name.includes('Samantha')) ||
-      voices.find(v => v.lang === 'en-US' && !v.localService) || // Online voices are usually better
-      voices.find(v => v.lang === 'en-US') ||
-      voices.find(v => v.lang.startsWith('en'));
-
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-    }
-
-    window.speechSynthesis.speak(utterance);
-  };
-
-  // Chrome loads voices asynchronously
-  if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.onvoiceschanged = () => {
-      loadVoicesAndSpeak();
-      window.speechSynthesis.onvoiceschanged = null; // Remove listener
-    };
-  } else {
-    loadVoicesAndSpeak();
-  }
+  // Type 2 = American English, Type 1 = British English
+  const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
+  
+  const audio = new Audio(url);
+  
+  audio.play().catch(e => {
+    console.warn("Youdao TTS failed, falling back to browser native", e);
+    fallbackToBrowserTTS(text);
+  });
 };
+
+const fallbackToBrowserTTS = (text: string) => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    window.speechSynthesis.speak(utterance);
+}

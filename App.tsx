@@ -33,7 +33,10 @@ function App() {
 
   // Save Data on Change
   useEffect(() => {
-    if (studyData.length > 0) {
+    // Only save if we have data or if we explicitly cleared it (empty array is valid state, but here we want to avoid saving empty if initialization is pending)
+    // However, if studyData is empty array, we probably want to save it to clear cache.
+    // Given the new "Reset" feature, we just save whatever is in studyData.
+    if (studyData) {
       localStorage.setItem('ebbinghaus_data', JSON.stringify(studyData));
     }
   }, [studyData]);
@@ -140,6 +143,12 @@ function App() {
         setStudyData(prev => prev.filter(item => item.id !== id));
     }
   };
+  
+  const handleResetToDefault = () => {
+      if(window.confirm("Reload standard textbook content? This will replace your current list with the PDF data.")) {
+          setStudyData(DEFAULT_STUDY_DATA);
+      }
+  }
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
@@ -243,9 +252,17 @@ function App() {
               </button>
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Add New Content</h3>
-                <p className="text-gray-500 text-sm mb-4">Paste text, vocabulary lists, or sentences. AI will format it for you.</p>
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative">
+                <div className="flex justify-between items-center mb-4">
+                     <h3 className="text-lg font-bold text-gray-800">Add New Content</h3>
+                     <button 
+                        onClick={handleResetToDefault}
+                        className="text-xs text-primary hover:text-indigo-700 hover:underline font-medium"
+                    >
+                        Reset to Textbook Content
+                    </button>
+                </div>
+                <p className="text-gray-500 text-sm mb-4">Paste text from your PDF here. AI will automatically format it.</p>
                 <textarea 
                     className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50 mb-4"
                     rows={4}

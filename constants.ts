@@ -3,352 +3,73 @@ import { StudyItem } from './types';
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export const DEFAULT_STUDY_DATA: StudyItem[] = [
-  // --- 30 Phrases ---
-  {
-    id: generateId(),
-    english: "catch sight of",
-    chinese: "看见，瞥见",
-    type: "phrase",
-    example: "I caught sight of him in the crowd.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
+  // Phrases
+  { id: generateId(), english: "at the weekend/at weekends", chinese: "在周末/在每个周末", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "go on tours with...", chinese: "和……去游览", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "visit places of interest", chinese: "参观名胜古迹", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "such as /for example /for instance", chinese: "比如", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "in person", chinese: "亲自", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "snake its way through", chinese: "蜿蜒穿过", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "get to do sth.", chinese: "有机会做某事", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "so far", chinese: "到目前为止", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "a bit of+n. / a bit+adj./adv.", chinese: "一点....../有点......", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "introduce sb to sth.", chinese: "使某人了解某物", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "as well", chinese: "也", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "be different from……", chinese: "与……不同", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "keep trying", chinese: "继续尝试", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "plan to do sth.", chinese: "计划做某事", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "keep in touch with sb", chinese: "与某人保持联系", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "one another", chinese: "互相，彼此", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "come over to", chinese: "来到", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "can’t wait (to do sth.)", chinese: "迫不及待（做......）", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "be grateful for……", chinese: "对……心存感激", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "culture shock", chinese: "文化冲击", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "feel unhappy about life", chinese: "对生活感到不满", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "find it difficult to do sth.", chinese: "发现做某事很难", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "deal with", chinese: "处理；应对", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "in most situations", chinese: "在大多数情况下", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "no longer/not...any more", chinese: "不再……", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "feel at home", chinese: "感到舒适自在", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "adapt to change", chinese: "适应变化", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "depend on", chinese: "取决于", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "see things from different points of view", chinese: "从不同的角度看待事物", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), english: "get along (well) with sb", chinese: "与……相处（得好）", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+
+  // Sentences
+  { 
+    id: generateId(), 
+    english: "At the weekend, they go on tours with their host families around Beijing and visit places of interest, such as the Great Wall, the Summer Palace and the National Museum.", 
+    chinese: "在周末，他们与寄宿家庭一起游览北京，参观名胜古迹，例如长城、颐和园和国家博物馆。", 
+    type: 'sentence', 
+    stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 
   },
-  {
-    id: generateId(),
-    english: "pay attention to",
-    chinese: "注意",
-    type: "phrase",
-    example: "Please pay attention to the safety instructions.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
+  { 
+    id: generateId(), 
+    english: "The Great Wall is no doubt one of the most amazing achievements in human history!", 
+    chinese: "长城无疑是人类历史上最惊人的成就之一！", 
+    type: 'sentence', 
+    stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 
   },
-  {
-    id: generateId(),
-    english: "run out of",
-    chinese: "用完，耗尽",
-    type: "phrase",
-    example: "We have ran out of milk, so I need to buy some.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
+  { 
+    id: generateId(), 
+    english: "The students also spend time learning about Chinese culture.", 
+    chinese: "学生们还花时间了解中国文化。", 
+    type: 'sentence', 
+    stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 
   },
-  {
-    id: generateId(),
-    english: "keep up with",
-    chinese: "跟上，赶上",
-    type: "phrase",
-    example: "It is hard to keep up with the rapid changes in technology.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
+  { 
+    id: generateId(), 
+    english: "It's been a fantastic experience so far.", 
+    chinese: "到目前为止，这是一次极好的经历。", 
+    type: 'sentence', 
+    stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 
   },
-  {
-    id: generateId(),
-    english: "look after",
-    chinese: "照顾，照料",
-    type: "phrase",
-    example: "Can you look after my dog while I am away?",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "give up",
-    chinese: "放弃",
-    type: "phrase",
-    example: "Don't give up on your dreams regardless of the difficulties.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "turn down",
-    chinese: "拒绝；调低",
-    type: "phrase",
-    example: "He turned down the job offer because the salary was too low.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "put off",
-    chinese: "推迟",
-    type: "phrase",
-    example: "The meeting was put off until next week due to the storm.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "come up with",
-    chinese: "想出，提出",
-    type: "phrase",
-    example: "She came up with a brilliant idea for the project.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "get along with",
-    chinese: "与...相处",
-    type: "phrase",
-    example: "I find it easy to get along with my new colleagues.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "take advantage of",
-    chinese: "利用",
-    type: "phrase",
-    example: "You should take advantage of this opportunity to learn.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "in charge of",
-    chinese: "负责，主管",
-    type: "phrase",
-    example: "Who is in charge of organizing the event?",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "regardless of",
-    chinese: "不管，不顾",
-    type: "phrase",
-    example: "The game will continue regardless of the weather.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "due to",
-    chinese: "由于，因为",
-    type: "phrase",
-    example: "The flight was cancelled due to heavy fog.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "as a result",
-    chinese: "结果",
-    type: "phrase",
-    example: "He studied hard and, as a result, passed the exam with flying colors.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "in addition to",
-    chinese: "除...之外",
-    type: "phrase",
-    example: "In addition to English, she speaks French and Spanish.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "make sure",
-    chinese: "确保，务必",
-    type: "phrase",
-    example: "Please make sure you lock the door before leaving.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "rely on",
-    chinese: "依赖，依靠",
-    type: "phrase",
-    example: "You can rely on him to help you when you are in trouble.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "cope with",
-    chinese: "处理，应付",
-    type: "phrase",
-    example: "It is difficult to cope with stress without support.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "figure out",
-    chinese: "弄清楚，解决",
-    type: "phrase",
-    example: "I can't figure out why the computer isn't working.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "look into",
-    chinese: "调查，研究",
-    type: "phrase",
-    example: "The police promised to look into the matter immediately.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "stand for",
-    chinese: "代表，象征",
-    type: "phrase",
-    example: "What do the letters 'UN' stand for?",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "break down",
-    chinese: "发生故障；分解",
-    type: "phrase",
-    example: "Our car broke down on the highway.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "carry out",
-    chinese: "执行，实施",
-    type: "phrase",
-    example: "They plan to carry out the experiment next week.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "set up",
-    chinese: "建立，设立",
-    type: "phrase",
-    example: "They decided to set up a new branch in the city.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "focus on",
-    chinese: "集中于，专注于",
-    type: "phrase",
-    example: "You need to focus on your studies to get good grades.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "remind of",
-    chinese: "使想起",
-    type: "phrase",
-    example: "This song reminds me of my childhood.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "consist of",
-    chinese: "由...组成",
-    type: "phrase",
-    example: "The team consists of five members.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "apply for",
-    chinese: "申请",
-    type: "phrase",
-    example: "He decided to apply for the scholarship.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "participate in",
-    chinese: "参加",
-    type: "phrase",
-    example: "Everyone is encouraged to participate in the discussion.",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  // --- 5 Sentences ---
-  {
-    id: generateId(),
-    english: "It is important to maintain a balanced diet for good health.",
-    chinese: "保持均衡饮食对健康很重要。",
-    type: "sentence",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "Technology has changed the way we communicate with each other.",
-    chinese: "科技改变了我们要彼此交流的方式。",
-    type: "sentence",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "Environmental protection is a global issue that concerns everyone.",
-    chinese: "环境保护是一个关乎每个人的全球性问题。",
-    type: "sentence",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "Learning a foreign language can broaden your horizons.",
-    chinese: "学习外语可以开阔你的视野。",
-    type: "sentence",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  },
-  {
-    id: generateId(),
-    english: "Practice makes perfect when acquiring a new skill.",
-    chinese: "在掌握一项新技能时，熟能生巧。",
-    type: "sentence",
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
+  { 
+    id: generateId(), 
+    english: "If you travel to a foreign country, you may feel confused, strange or anxious.", 
+    chinese: "如果你去国外旅行，你可能会感到困惑、陌生或焦虑。", 
+    type: 'sentence', 
+    stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 
   }
 ];
 
