@@ -1,0 +1,39 @@
+export enum CardStatus {
+  NEW = 'NEW',
+  LEARNING = 'LEARNING',
+  REVIEWING = 'REVIEWING',
+  MASTERED = 'MASTERED'
+}
+
+export enum StudyMode {
+  FLASHCARD = 'FLASHCARD',
+  QUIZ = 'QUIZ',
+  INPUT = 'INPUT',
+  DASHBOARD = 'DASHBOARD'
+}
+
+export type ReviewGrade = 'AGAIN' | 'HARD' | 'GOOD' | 'EASY';
+
+export interface StudyItem {
+  id: string;
+  english: string;
+  chinese: string;
+  type: 'word' | 'phrase' | 'sentence';
+  example?: string; // Added field for example sentences
+  
+  // Ebbinghaus properties
+  stage: number; // 0 to 5
+  nextReviewDate: number; // Timestamp
+  lastReviewedDate?: number; // Timestamp
+  easeFactor: number; // Standard spaced repetition factor (default 2.5)
+}
+
+export interface QuizResult {
+  correct: boolean;
+  userAnswer: string;
+}
+
+export interface ProcessingState {
+  isProcessing: boolean;
+  error?: string;
+}
