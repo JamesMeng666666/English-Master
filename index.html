@@ -14,10 +14,15 @@
               sans: ['Inter', 'sans-serif'],
             },
             colors: {
-              primary: '#4F46E5',
-              secondary: '#10B981',
-              dark: '#111827',
-              light: '#F3F4F6',
+              // Eye-friendly palette (Warm/Paper theme)
+              primary: '#4361EE', // Softer Royal Blue
+              'primary-dark': '#3046C4',
+              secondary: '#10B981', // Emerald is good for eyes
+              dark: '#1F2937', // Gray 800 (Softer than black)
+              paper: '#FAF9F6', // Warm Off-white
+              surface: '#FFFFFF',
+              'surface-hover': '#F3F4F6',
+              input: '#F9FAFB',
             }
           }
         }
@@ -66,6 +71,7 @@
       /* Fix for mobile safari height */
       html, body {
         height: 100dvh;
+        background-color: #FAF9F6; /* Global warm background */
       }
       #root {
         height: 100%;
@@ -83,7 +89,7 @@
 }
 </script>
 </head>
-  <body class="bg-gray-50 text-gray-900 overflow-hidden">
+  <body class="text-gray-800 overflow-hidden">
     <div id="root" class="h-full flex flex-col"></div>
     <script type="module" src="./index.tsx"></script>
   </body>

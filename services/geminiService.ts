@@ -16,7 +16,7 @@ export const parseContentWithGemini = async (rawText: string, apiKey: string): P
   `;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-latest',
+    model: 'gemini-3-flash-preview',
     contents: [
         { role: 'user', parts: [{ text: prompt }]},
         { role: 'user', parts: [{ text: `Here is the text to process: \n${rawText}` }]}
