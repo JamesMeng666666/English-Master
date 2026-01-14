@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Ebbinghaus MemoCard AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,16 +27,17 @@
       /* Custom scrollbar for better aesthetics */
       ::-webkit-scrollbar {
         width: 8px;
+        height: 4px; /* Horizontal scrollbar height */
       }
       ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+        background: transparent; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #c7c7c7; 
+        background: #d1d5db; 
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #a8a8a8; 
+        background: #9ca3af; 
       }
       
       .perspective-1000 {
@@ -51,6 +52,24 @@
       .rotate-y-180 {
         transform: rotateY(180deg);
       }
+      
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+      }
+
+      /* Fix for mobile safari height */
+      html, body {
+        height: 100dvh;
+      }
+      #root {
+        height: 100%;
+      }
     </style>
   <script type="importmap">
 {
@@ -64,7 +83,7 @@
 }
 </script>
 </head>
-  <body class="bg-gray-50 text-gray-900 h-screen overflow-hidden">
+  <body class="bg-gray-50 text-gray-900 overflow-hidden">
     <div id="root" class="h-full flex flex-col"></div>
     <script type="module" src="./index.tsx"></script>
   </body>

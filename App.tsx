@@ -161,14 +161,14 @@ function App() {
     <div className="h-full flex flex-col bg-gray-50">
       <ApiKeyModal isOpen={showKeyModal} onClose={() => setShowKeyModal(false)} onSave={setApiKey} />
 
-      <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center sticky top-0 z-10 shrink-0">
+      <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-2 md:py-4 flex justify-between items-center sticky top-0 z-10 shrink-0">
         <div className="flex items-center gap-2">
             <div className="bg-primary p-1.5 md:p-2 rounded-lg">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </div>
             <h1 className="text-lg md:text-xl font-bold text-gray-800">MemoCard AI</h1>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 md:gap-3">
              <button onClick={() => setMode(StudyMode.DASHBOARD)} className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium transition-colors ${mode === StudyMode.DASHBOARD ? 'bg-gray-100 text-primary' : 'text-gray-500 hover:text-gray-900'}`}>Dashboard</button>
             <button onClick={() => setShowKeyModal(true)} className="p-1.5 md:p-2 text-gray-400 hover:text-gray-600" title="Settings">
                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -176,26 +176,28 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col items-center">
+      <main className="flex-1 overflow-y-auto p-3 md:p-6 flex flex-col items-center">
         {mode === StudyMode.DASHBOARD && (
           <div className="w-full max-w-4xl space-y-4 md:space-y-6">
-            {/* Group Switcher */}
-            <div className="flex items-center justify-between">
-                <h2 className="text-base md:text-lg font-bold text-gray-800">Study Group</h2>
-                <div className="flex bg-white rounded-lg p-1 border border-gray-200 overflow-x-auto max-w-[60%] md:max-w-none no-scrollbar">
-                    {groups.map(g => (
-                        <button
-                            key={g}
-                            onClick={() => setSelectedGroup(g)}
-                            className={`px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm font-medium rounded-md whitespace-nowrap transition-all ${selectedGroup === g ? 'bg-primary text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-                        >
-                            {g}
-                        </button>
-                    ))}
+            {/* Group Switcher - Optimized for Safari Horizontal Scroll */}
+            <div className="flex items-center justify-between gap-3">
+                <h2 className="text-base md:text-lg font-bold text-gray-800 shrink-0">Study Group</h2>
+                <div className="flex-1 min-w-0">
+                    <div className="flex overflow-x-auto bg-white rounded-lg p-1 border border-gray-200 no-scrollbar touch-pan-x">
+                        {groups.map(g => (
+                            <button
+                                key={g}
+                                onClick={() => setSelectedGroup(g)}
+                                className={`shrink-0 px-3 py-1.5 md:px-4 md:py-1.5 text-xs md:text-sm font-medium rounded-md whitespace-nowrap transition-all ${selectedGroup === g ? 'bg-primary text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                            >
+                                {g}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
-            {/* Main Action Buttons - Moved to Top - Optimized for Mobile */}
+            {/* Main Action Buttons */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
               <button
                 onClick={() => { setMode(StudyMode.FLASHCARD); setCurrentCardIndex(0); }}
@@ -238,7 +240,7 @@ function App() {
               </button>
             </div>
 
-            {/* Stats - Moved down and made smaller/compact */}
+            {/* Stats - Compact */}
             <div className="grid grid-cols-3 gap-3 md:gap-4">
               <div className="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
                 <span className="text-xl md:text-2xl font-bold text-primary">{stats.due}</span>
@@ -254,15 +256,16 @@ function App() {
               </div>
             </div>
 
+            {/* Add Content - Compacted for Mobile */}
             <div className="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-gray-100 relative">
-                <div className="flex justify-between items-center mb-3 md:mb-4">
-                     <h3 className="text-base md:text-lg font-bold text-gray-800">Add New Content</h3>
-                     <button onClick={handleResetToDefault} className="text-xs text-primary hover:text-indigo-700 hover:underline font-medium">Reset Content</button>
+                <div className="flex justify-between items-center mb-2 md:mb-4">
+                     <h3 className="text-base md:text-lg font-bold text-gray-800">Add Content</h3>
+                     <button onClick={handleResetToDefault} className="text-xs text-primary hover:text-indigo-700 hover:underline font-medium">Reset</button>
                 </div>
-                <p className="text-gray-500 text-xs md:text-sm mb-3 md:mb-4">Paste text from your PDF here. It will be added to <strong>{selectedGroup !== 'All' ? selectedGroup : 'Custom'}</strong> group.</p>
-                <textarea className="w-full p-3 md:p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50 mb-3 md:mb-4 text-sm" rows={4} placeholder="e.g. 1. apple - 苹果 2. banana - 香蕉..." value={rawInput} onChange={(e) => setRawInput(e.target.value)} />
-                <button onClick={handleParseContent} disabled={isProcessing} className="w-full md:w-auto px-4 py-2.5 md:px-6 md:py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-70 transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
-                    {isProcessing ? (<><svg className="animate-spin h-4 w-4 md:h-5 md:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...</>) : (<><svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>Generate Cards with AI</>)}
+                <p className="text-gray-500 text-xs md:text-sm mb-2 md:mb-4">Paste text to add to <strong>{selectedGroup !== 'All' ? selectedGroup : 'Custom'}</strong>.</p>
+                <textarea className="w-full p-3 md:p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50 mb-3 md:mb-4 text-sm" rows={2} placeholder="e.g. 1. apple - 苹果..." value={rawInput} onChange={(e) => setRawInput(e.target.value)} />
+                <button onClick={handleParseContent} disabled={isProcessing} className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-70 transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
+                    {isProcessing ? (<><svg className="animate-spin h-4 w-4 md:h-5 md:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...</>) : (<><svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>Generate Cards</>)}
                 </button>
             </div>
           </div>
