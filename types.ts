@@ -19,8 +19,9 @@ export interface StudyItem {
   id: string;
   english: string;
   chinese: string;
+  group: string; // Added field for categorization (e.g., 8AU5, 8AU6)
   type: 'word' | 'phrase' | 'sentence';
-  example?: string; // Added field for example sentences
+  example?: string;
   
   // Ebbinghaus properties
   stage: number; // 0 to 5

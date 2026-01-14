@@ -15,10 +15,10 @@ function App() {
   const [rawInput, setRawInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [selectedGroup, setSelectedGroup] = useState<string>('All');
 
   // Initialize Data
   useEffect(() => {
-    // Try to load from local storage
     const savedData = localStorage.getItem('ebbinghaus_data');
     const savedKey = localStorage.getItem('gemini_api_key');
 
@@ -33,39 +33,45 @@ function App() {
 
   // Save Data on Change
   useEffect(() => {
-    // Only save if we have data or if we explicitly cleared it (empty array is valid state, but here we want to avoid saving empty if initialization is pending)
-    // However, if studyData is empty array, we probably want to save it to clear cache.
-    // Given the new "Reset" feature, we just save whatever is in studyData.
-    if (studyData) {
+    if (studyData.length > 0) {
       localStorage.setItem('ebbinghaus_data', JSON.stringify(studyData));
     }
   }, [studyData]);
 
+  // Available groups
+  const groups = useMemo(() => {
+    const uniqueGroups = Array.from(new Set(studyData.map(item => item.group)));
+    return ['All', ...uniqueGroups.sort()];
+  }, [studyData]);
+
+  // Derived filtered items based on selected group
+  const filteredStudyData = useMemo(() => {
+    if (selectedGroup === 'All') return studyData;
+    return studyData.filter(item => item.group === selectedGroup);
+  }, [studyData, selectedGroup]);
+
   // Derived state for stats
   const stats = useMemo(() => {
-    const due = studyData.filter(i => i.nextReviewDate <= Date.now()).length;
-    const mastered = studyData.filter(i => i.stage >= 6).length;
-    const total = studyData.length;
+    const due = filteredStudyData.filter(i => i.nextReviewDate <= Date.now()).length;
+    const mastered = filteredStudyData.filter(i => i.stage >= 6).length;
+    const total = filteredStudyData.length;
     return { due, mastered, total };
-  }, [studyData]);
+  }, [filteredStudyData]);
 
   // Derived state for current session
   const sessionQueue = useMemo(() => {
     if (mode === StudyMode.FLASHCARD) {
-        // Sort by priority: due date asc, then stage asc
-        return studyData
+        return filteredStudyData
             .filter(i => i.nextReviewDate <= Date.now())
             .sort((a, b) => a.nextReviewDate - b.nextReviewDate);
     } else if (mode === StudyMode.QUIZ) {
-        // Quiz mode uses items that are at least stage 1 (somewhat familiar)
-        return studyData.filter(i => i.stage > 0).sort(() => 0.5 - Math.random());
+        return filteredStudyData.filter(i => i.stage > 0).sort(() => 0.5 - Math.random());
     }
     return [];
-  }, [studyData, mode]);
+  }, [filteredStudyData, mode]);
 
   const currentItem = sessionQueue[currentCardIndex];
 
-  // Logic to update Ebbinghaus stage based on grade
   const updateCardProgress = (id: string, grade: ReviewGrade) => {
     setStudyData(prevData => prevData.map(item => {
       if (item.id !== id) return item;
@@ -75,24 +81,18 @@ function App() {
 
       switch (grade) {
         case 'AGAIN':
-          // Reset to beginning.
           newStage = 0;
-          nextReview = Date.now() + 60 * 1000; // 1 minute delay (conceptually "immediately")
+          nextReview = Date.now() + 60 * 1000;
           break;
         case 'HARD':
-          // Don't advance stage, just reschedule for the same interval
-          // This reinforces difficult cards without resetting them completely
-          // or use a shorter interval (e.g. 0.5 * current interval)
           newStage = Math.max(1, item.stage); 
           nextReview = Date.now() + INTERVALS[newStage];
           break;
         case 'GOOD':
-          // Standard progression
           newStage = Math.min(item.stage + 1, INTERVALS.length - 1);
           nextReview = Date.now() + INTERVALS[newStage];
           break;
         case 'EASY':
-          // Jump ahead - accelerator
           newStage = Math.min(item.stage + 2, INTERVALS.length - 1);
           nextReview = Date.now() + INTERVALS[newStage];
           break;
@@ -106,11 +106,9 @@ function App() {
       };
     }));
 
-    // Move to next card
     if (currentCardIndex < sessionQueue.length - 1) {
       setCurrentCardIndex(prev => prev + 1);
     } else {
-      // Session complete
       alert("Session Complete! Great job.");
       setMode(StudyMode.DASHBOARD);
       setCurrentCardIndex(0);
@@ -122,10 +120,14 @@ function App() {
     setIsProcessing(true);
     try {
       const newItems = await parseContentWithGemini(rawInput, apiKey);
-      setStudyData(prev => [...prev, ...newItems]);
+      // Default new items to a group based on current selection or input if available
+      const groupName = selectedGroup !== 'All' ? selectedGroup : 'Custom';
+      const itemsWithGroup = newItems.map(item => ({ ...item, group: groupName }));
+      
+      setStudyData(prev => [...prev, ...itemsWithGroup]);
       setRawInput('');
       setMode(StudyMode.DASHBOARD);
-      alert(`Successfully added ${newItems.length} new items!`);
+      alert(`Successfully added ${newItems.length} new items to ${groupName}!`);
     } catch (error) {
       console.error(error);
       alert("Failed to process content. Please ensure your API Key is valid.");
@@ -145,20 +147,20 @@ function App() {
   };
   
   const handleResetToDefault = () => {
-      if(window.confirm("Reload standard textbook content? This will replace your current list with the PDF data.")) {
-          setStudyData(DEFAULT_STUDY_DATA);
+      if(window.confirm("Reload standard textbook content (8AU5 & 8AU6)? Current custom content will be kept if you append.")) {
+          // Find IDs from default to avoid duplicates or just replace
+          if (window.confirm("Replace everything or append? Cancel to Replace, OK to Append.")) {
+              setStudyData(prev => [...prev, ...DEFAULT_STUDY_DATA]);
+          } else {
+              setStudyData(DEFAULT_STUDY_DATA);
+          }
       }
   }
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
-      <ApiKeyModal 
-        isOpen={showKeyModal} 
-        onClose={() => setShowKeyModal(false)} 
-        onSave={setApiKey} 
-      />
+      <ApiKeyModal isOpen={showKeyModal} onClose={() => setShowKeyModal(false)} onSave={setApiKey} />
 
-      {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
         <div className="flex items-center gap-2">
             <div className="bg-primary p-2 rounded-lg">
@@ -167,49 +169,36 @@ function App() {
             <h1 className="text-xl font-bold text-gray-800 hidden md:block">MemoCard AI</h1>
         </div>
         <div className="flex gap-4">
-             <button 
-                onClick={() => setMode(StudyMode.DASHBOARD)} 
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${mode === StudyMode.DASHBOARD ? 'bg-gray-100 text-primary' : 'text-gray-500 hover:text-gray-900'}`}
-            >
-                Dashboard
-            </button>
-            <button 
-                onClick={() => setShowKeyModal(true)}
-                className="p-2 text-gray-400 hover:text-gray-600"
-                title="Settings"
-            >
+             <button onClick={() => setMode(StudyMode.DASHBOARD)} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${mode === StudyMode.DASHBOARD ? 'bg-gray-100 text-primary' : 'text-gray-500 hover:text-gray-900'}`}>Dashboard</button>
+            <button onClick={() => setShowKeyModal(true)} className="p-2 text-gray-400 hover:text-gray-600" title="Settings">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             </button>
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-6 flex flex-col items-center">
-        
-        {/* Dashboard Mode */}
         {mode === StudyMode.DASHBOARD && (
-          <div className="w-full max-w-4xl space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
-                <span className="text-4xl font-bold text-primary mb-2">{stats.due}</span>
-                <span className="text-gray-500 font-medium">Cards Due</span>
-              </div>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
-                <span className="text-4xl font-bold text-secondary mb-2">{stats.mastered}</span>
-                <span className="text-gray-500 font-medium">Mastered</span>
-              </div>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
-                <span className="text-4xl font-bold text-gray-800 mb-2">{stats.total}</span>
-                <span className="text-gray-500 font-medium">Total Items</span>
-              </div>
+          <div className="w-full max-w-4xl space-y-6">
+            {/* Group Switcher */}
+            <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-gray-800">Study Group</h2>
+                <div className="flex bg-white rounded-lg p-1 border border-gray-200">
+                    {groups.map(g => (
+                        <button
+                            key={g}
+                            onClick={() => setSelectedGroup(g)}
+                            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${selectedGroup === g ? 'bg-primary text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            {g}
+                        </button>
+                    ))}
+                </div>
             </div>
 
+            {/* Main Action Buttons - Moved to Top */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <button
-                onClick={() => {
-                    setMode(StudyMode.FLASHCARD);
-                    setCurrentCardIndex(0);
-                }}
+                onClick={() => { setMode(StudyMode.FLASHCARD); setCurrentCardIndex(0); }}
                 disabled={stats.due === 0}
                 className="bg-primary hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-8 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col items-center justify-center gap-4 group text-center"
               >
@@ -223,10 +212,7 @@ function App() {
               </button>
 
               <button
-                onClick={() => {
-                    setMode(StudyMode.QUIZ);
-                    setCurrentCardIndex(0);
-                }}
+                onClick={() => { setMode(StudyMode.QUIZ); setCurrentCardIndex(0); }}
                 className="bg-secondary hover:bg-emerald-600 text-white p-8 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col items-center justify-center gap-4 text-center"
               >
                  <div className="bg-white/20 p-4 rounded-full">
@@ -247,127 +233,78 @@ function App() {
                 </div>
                  <div>
                     <h3 className="text-xl font-bold">View List</h3>
-                    <p className="text-gray-300 text-sm mt-1">Show all {stats.total} items</p>
+                    <p className="text-gray-300 text-sm mt-1">Show all items</p>
                 </div>
               </button>
+            </div>
+
+            {/* Stats - Moved down and made smaller/compact */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold text-primary">{stats.due}</span>
+                <span className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Due</span>
+              </div>
+              <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold text-secondary">{stats.mastered}</span>
+                <span className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Mastered</span>
+              </div>
+              <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold text-gray-800">{stats.total}</span>
+                <span className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Total</span>
+              </div>
             </div>
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative">
                 <div className="flex justify-between items-center mb-4">
                      <h3 className="text-lg font-bold text-gray-800">Add New Content</h3>
-                     <button 
-                        onClick={handleResetToDefault}
-                        className="text-xs text-primary hover:text-indigo-700 hover:underline font-medium"
-                    >
-                        Reset to Textbook Content
-                    </button>
+                     <button onClick={handleResetToDefault} className="text-xs text-primary hover:text-indigo-700 hover:underline font-medium">Reset Content</button>
                 </div>
-                <p className="text-gray-500 text-sm mb-4">Paste text from your PDF here. AI will automatically format it.</p>
-                <textarea 
-                    className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50 mb-4"
-                    rows={4}
-                    placeholder="e.g. 1. apple - 苹果 2. banana - 香蕉..."
-                    value={rawInput}
-                    onChange={(e) => setRawInput(e.target.value)}
-                />
-                <button 
-                    onClick={handleParseContent}
-                    disabled={isProcessing}
-                    className="w-full md:w-auto px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-70 transition-colors flex items-center justify-center gap-2"
-                >
-                    {isProcessing ? (
-                        <>
-                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Processing...
-                        </>
-                    ) : (
-                         <>
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            Generate Cards with AI
-                         </>
-                    )}
+                <p className="text-gray-500 text-sm mb-4">Paste text from your PDF here. It will be added to <strong>{selectedGroup !== 'All' ? selectedGroup : 'Custom'}</strong> group.</p>
+                <textarea className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50 mb-4" rows={4} placeholder="e.g. 1. apple - 苹果 2. banana - 香蕉..." value={rawInput} onChange={(e) => setRawInput(e.target.value)} />
+                <button onClick={handleParseContent} disabled={isProcessing} className="w-full md:w-auto px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-70 transition-colors flex items-center justify-center gap-2">
+                    {isProcessing ? (<><svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...</>) : (<><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>Generate Cards with AI</>)}
                 </button>
             </div>
           </div>
         )}
 
-        {/* Flashcard Mode */}
         {mode === StudyMode.FLASHCARD && (
           <div className="w-full max-w-4xl flex flex-col items-center justify-center min-h-[60vh]">
             <div className="mb-8 w-full flex justify-between items-center px-4">
-                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Quit
-                 </button>
-                 <span className="text-sm font-medium text-gray-400">Card {currentCardIndex + 1} of {sessionQueue.length}</span>
+                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>Quit</button>
+                 <span className="text-sm font-medium text-gray-400">{selectedGroup} - Card {currentCardIndex + 1} of {sessionQueue.length}</span>
             </div>
-            
-            {currentItem ? (
-              <Flashcard 
-                item={currentItem} 
-                onResult={(grade) => updateCardProgress(currentItem.id, grade)}
-                onPlayAudio={handlePlayAudio}
-              />
-            ) : (
+            {currentItem ? (<Flashcard item={currentItem} onResult={(grade) => updateCardProgress(currentItem.id, grade)} onPlayAudio={handlePlayAudio} />) : (
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">All Caught Up!</h2>
-                <p className="text-gray-500 mb-6">You have no cards due for review right now.</p>
+                <p className="text-gray-500 mb-6">No more cards due for {selectedGroup} right now.</p>
                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-2 bg-primary text-white rounded-lg">Back to Dashboard</button>
               </div>
             )}
           </div>
         )}
 
-        {/* Quiz Mode */}
         {mode === StudyMode.QUIZ && (
           <div className="w-full max-w-4xl flex flex-col items-center justify-center min-h-[60vh]">
              <div className="mb-8 w-full flex justify-between items-center px-4">
-                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Quit
-                 </button>
-                 <span className="text-sm font-medium text-gray-400">Question {currentCardIndex + 1} of {sessionQueue.length}</span>
+                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>Quit</button>
+                 <span className="text-sm font-medium text-gray-400">{selectedGroup} - Question {currentCardIndex + 1} of {sessionQueue.length}</span>
             </div>
-
-            {currentItem ? (
-              <Quiz 
-                item={currentItem}
-                onComplete={(success) => {
-                    // Quiz results don't necessarily update flashcard progress in this simplified version,
-                    // but we move to next.
-                     if (currentCardIndex < sessionQueue.length - 1) {
-                        setCurrentCardIndex(prev => prev + 1);
-                    } else {
-                        alert("Quiz Complete!");
-                        setMode(StudyMode.DASHBOARD);
-                    }
-                }}
-              />
-             ) : (
+            {currentItem ? (<Quiz item={currentItem} onComplete={() => { if (currentCardIndex < sessionQueue.length - 1) { setCurrentCardIndex(prev => prev + 1); } else { alert("Quiz Complete!"); setMode(StudyMode.DASHBOARD); } }} />) : (
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Not Enough Data</h2>
-                    <p className="text-gray-500 mb-6">Review some flashcards first to unlock quizzes.</p>
+                    <p className="text-gray-500 mb-6">Review {selectedGroup} flashcards first to unlock quizzes.</p>
                     <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-2 bg-primary text-white rounded-lg">Back to Dashboard</button>
                 </div>
              )}
           </div>
         )}
         
-        {/* List Mode */}
         {mode === StudyMode.LIST && (
             <div className="w-full flex justify-center p-4 h-full">
-                <VocabularyList 
-                    items={studyData} 
-                    onBack={() => setMode(StudyMode.DASHBOARD)}
-                    onPlayAudio={handlePlayAudio}
-                    onDelete={handleDeleteItem}
-                />
+                <VocabularyList items={studyData} onBack={() => setMode(StudyMode.DASHBOARD)} onPlayAudio={handlePlayAudio} onDelete={handleDeleteItem} />
             </div>
         )}
-
       </main>
     </div>
   );
