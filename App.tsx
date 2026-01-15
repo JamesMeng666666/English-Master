@@ -159,7 +159,7 @@ function App() {
   };
   
   const handleResetToDefault = () => {
-      if(window.confirm("Reload standard textbook content (8AU5 & 8AU6)? Current custom content will be kept if you append.")) {
+      if(window.confirm("Reload standard textbook content (8AU1, 8AU2, 8AU3, 8AU4, 8AU5, 8AU6, 8AU7, 8AU8)? Current custom content will be kept if you append.")) {
           // Find IDs from default to avoid duplicates or just replace
           if (window.confirm("Replace everything or append? Cancel to Replace, OK to Append.")) {
               setStudyData(prev => [...prev, ...DEFAULT_STUDY_DATA]);
