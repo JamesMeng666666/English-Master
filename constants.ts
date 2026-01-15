@@ -297,7 +297,23 @@ export const DEFAULT_STUDY_DATA: StudyItem[] = [
   { id: generateId(), group: "8AU8", english: "on one's own", chinese: "独自地；独立地", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
   { id: generateId(), group: "8AU8", english: "add up", chinese: "合计", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
   { id: generateId(), group: "8AU8", english: "on the whole", chinese: "总之；总体而言", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
-  { id: generateId(), group: "8AU8", english: "complain about......", chinese: "抱怨......", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 }
+  { id: generateId(), group: "8AU8", english: "complain about......", chinese: "抱怨......", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "the other day", chinese: "前几天", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "in one's opinion", chinese: "在某人看来", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "find out", chinese: "发现；查明；弄清楚", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "bring good luck", chinese: "带来好运", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "a symbol of", chinese: "……的象征", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "all kinds of", chinese: "各种各样的", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "catch the eye of sb.", chinese: "引起某人的注意", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "go on to do sth.", chinese: "继续做某事", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "star in", chinese: "在...... 中担任主角", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+
+  // --- 8AU8 Sentences ---
+  { id: generateId(), group: "8AU8", english: "A dog will love you faithfully and is always pleased to see you.", chinese: "狗狗会忠诚地爱你并且见到你总是很高兴。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "They have no choice but to keep their dogs inside most of the time.", chinese: "大多数时候，他们除了把狗狗养在室内别无选择。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "This is not good for dogs since they need fresh air and large open spaces where they can run free.", chinese: "这样对狗狗不好，因为他们需要新鲜的空气和让它们能自由奔跑的开阔空间。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "An owner needs to buy food and toys for his or her dog, and if the dog gets ill, it needs to be taken to the vet.", chinese: "主人需要为他(她)的狗狗买食物和玩具，而且如果狗生病了，还需要带去看兽医。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8AU8", english: "Because of all these reasons, I would advise you not to get a dog as a pet.", chinese: "由于所有这些原因，我会建议你不要养狗狗作宠物。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
 ];
 
 export const INTERVALS = [
