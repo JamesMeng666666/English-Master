@@ -24,7 +24,25 @@ function App() {
     const savedKey = localStorage.getItem('gemini_api_key');
 
     if (savedData) {
-      setStudyData(JSON.parse(savedData));
+      let parsedData = JSON.parse(savedData);
+      
+      // Auto-merge missing groups from DEFAULT_STUDY_DATA
+      const existingGroups = new Set(parsedData.map((item: StudyItem) => item.group));
+      const defaultGroups = new Set(DEFAULT_STUDY_DATA.map(item => item.group));
+      
+      let hasNewData = false;
+      defaultGroups.forEach(group => {
+        if (!existingGroups.has(group)) {
+          const itemsToAdd = DEFAULT_STUDY_DATA.filter(item => item.group === group);
+          parsedData = [...parsedData, ...itemsToAdd];
+          hasNewData = true;
+        }
+      });
+      
+      setStudyData(parsedData);
+      if (hasNewData) {
+        localStorage.setItem('ebbinghaus_data', JSON.stringify(parsedData));
+      }
     } else {
       setStudyData(DEFAULT_STUDY_DATA);
     }
@@ -159,7 +177,7 @@ function App() {
   };
   
   const handleResetToDefault = () => {
-      if(window.confirm("Reload standard textbook content (8AU1, 8AU2, 8AU3, 8AU4, 8AU5, 8AU6, 8AU7, 8AU8)? Current custom content will be kept if you append.")) {
+      if(window.confirm("Reload standard textbook content (8AU1, 8AU2, 8AU3, 8AU4, 8AU5, 8AU6, 8AU7, 8AU8, 8BU1, 8BU2)? Current custom content will be kept if you append.")) {
           // Find IDs from default to avoid duplicates or just replace
           if (window.confirm("Replace everything or append? Cancel to Replace, OK to Append.")) {
               setStudyData(prev => [...prev, ...DEFAULT_STUDY_DATA]);
@@ -178,7 +196,7 @@ function App() {
             <div className="bg-primary p-1.5 md:p-2 rounded-lg shadow-sm">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             </div>
-            <h1 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">MemoCard AI</h1>
+            <h1 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">词组记忆</h1>
         </div>
         <div className="flex gap-2 md:gap-3">
              <button onClick={() => setMode(StudyMode.DASHBOARD)} className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium transition-colors ${mode === StudyMode.DASHBOARD ? 'bg-indigo-50 text-primary' : 'text-gray-500 hover:text-gray-900'}`}>Dashboard</button>
