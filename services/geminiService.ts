@@ -29,15 +29,30 @@ export const expandTextForAudio = (text: string): string => {
   return expanded;
 };
 
-export const preloadAudio = (item: StudyItem) => {
-  // Not needed when using raw base64 PCM or local wav files.
+export const preloadAudio = async (item: StudyItem) => {
+  if (item.audioBase64) return;
+  // Pre-fetch missing audio dynamically in background
+  try {
+    const res = await fetch('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: item.english })
+    });
+    if (res.ok) {
+      const { audioBase64 } = await res.json();
+      item.audioBase64 = audioBase64;
+    }
+  } catch (err) {
+    // Ignore, fallback to TTS when played
+  }
 };
 
-let audioCtx: AudioContext | null = null;
+let audioCtx: window.AudioContext | null = null;
 
 const playPcmBase64 = async (base64: string) => {
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
   if (!audioCtx) {
-    audioCtx = new AudioContext({ sampleRate: 24000 });
+    audioCtx = new AudioContextClass({ sampleRate: 24000 });
   }
   
   if (audioCtx.state === 'suspended') {
@@ -71,9 +86,37 @@ const playPcmBase64 = async (base64: string) => {
 };
 
 export const playAudio = async (item: StudyItem | string): Promise<void> => {
+  // Mobile Safari requires AudioContext activation within immediate user interaction.
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+  if (!audioCtx && AudioContextClass) {
+    audioCtx = new AudioContextClass({ sampleRate: 24000 });
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
   const text = typeof item === 'string' ? item : item.english;
-  const base64 = typeof item === 'string' ? undefined : item.audioBase64;
+  let base64 = typeof item === 'string' ? undefined : item.audioBase64;
   
+  if (!base64) {
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        base64 = data.audioBase64;
+        if (typeof item !== 'string') {
+          item.audioBase64 = base64; // Cache it
+        }
+      }
+    } catch (err) {
+      console.warn("Dynamic TTS fetch failed", err);
+    }
+  }
+
   if (base64) {
     try {
       await playPcmBase64(base64);
@@ -83,25 +126,26 @@ export const playAudio = async (item: StudyItem | string): Promise<void> => {
     }
   }
 
-  // Try fetching offline generated wav
+  // Fallback...
   try {
     const slug = slugify(text);
     const audioUrl = `/audio/${slug}.mp3`;
-    const res = await fetch(audioUrl, { method: 'HEAD' });
-    const contentType = res.headers.get('content-type');
-    if (res.ok && contentType && !contentType.includes('text/html')) {
-      const audio = new Audio(audioUrl);
-      audio.play().catch((err) => {
-        console.error("Audio play error", err);
+    const audio = new Audio(audioUrl);
+    
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.warn("Audio play error, falling back to TTS", error);
         fallbackToBrowserTTS(expandTextForAudio(text));
       });
       return;
     }
   } catch (err) {
+    console.error("Audio play error", err);
     // Ignore fetch errors, fallback to browser TTS
   }
 
-  // Fallback to browser TTS if no pre-generated audio
+  // Fallback to browser TTS if no pre-generated audio or playback fails
   fallbackToBrowserTTS(expandTextForAudio(text));
 };
 

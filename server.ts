@@ -77,44 +77,62 @@ async function startServer() {
 
       const parsed = JSON.parse(rawJson);
 
-      const cards = await Promise.all(parsed.map(async (item: any) => {
-        let audioBase64 = '';
-        try {
-          const expandedText = expandTextForAudio(item.english);
-          const ttsResponse = await ai.models.generateContent({
-            model: "gemini-3.1-flash-tts-preview",
-            contents: [{ parts: [{ text: `Say clearly: ${expandedText}` }] }],
-            config: {
-              responseModalities: [Modality.AUDIO],
-              speechConfig: {
-                  voiceConfig: {
-                    prebuiltVoiceConfig: { voiceName: 'Zephyr' },
-                  },
-              },
-            },
-          });
-          const base64Audio = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-          if (base64Audio) {
-            audioBase64 = base64Audio;
-          }
-        } catch (err) {
-          console.error("TTS error for", item.english, err);
-        }
-
+      const cards = parsed.map((item: any) => {
         return {
           ...item,
           id: Math.random().toString(36).substring(2, 9),
           stage: 0,
           nextReviewDate: Date.now(),
           easeFactor: 2.5,
-          audioBase64
+          audioBase64: '' // We will fetch audio dynamically now to prevent rate limiting
         };
-      }));
+      });
 
       res.json(cards);
     } catch (e: any) {
       console.error(e);
       res.status(500).json({ error: e.message || "Failed to generate cards" });
+    }
+  });
+
+  app.post("/api/tts", async (req, res) => {
+    try {
+      const { text } = req.body;
+      const apiKey = process.env.GEMINI_API_KEY;
+
+      if (!apiKey) {
+         return res.status(400).json({ error: "No API Key" });
+      }
+      
+      const ai = new GoogleGenAI({
+        apiKey,
+        httpOptions: {
+          headers: { 'User-Agent': 'aistudio-build' }
+        }
+      });
+      
+      const expandedText = expandTextForAudio(text);
+      const ttsResponse = await ai.models.generateContent({
+        model: "gemini-3.1-flash-tts-preview",
+        contents: [{ parts: [{ text: `Say clearly: ${expandedText}` }] }],
+        config: {
+          responseModalities: [Modality.AUDIO],
+          speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: { voiceName: 'Zephyr' },
+              },
+          },
+        },
+      });
+      const base64Audio = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (base64Audio) {
+         res.json({ audioBase64: base64Audio });
+      } else {
+         res.status(500).json({ error: "No audio generated" });
+      }
+    } catch (e: any) {
+      console.error("TTS error:", e);
+      res.status(500).json({ error: e.message || "Failed to generate TTS" });
     }
   });
 
