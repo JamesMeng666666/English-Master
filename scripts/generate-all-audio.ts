@@ -45,15 +45,26 @@ async function main() {
     
     const expanded = expandTextForAudio(phrase);
     const slug = slugify(phrase);
+    const tempPath = path.join(outDir, `${slug}.temp.mp3`);
     const filePath = path.join(outDir, `${slug}.mp3`);
 
-    if (fs.existsSync(filePath)) {
-      continue; // Skip if already exists
+    // Download to temp file
+    await downloadAudio(expanded, tempPath);
+    
+    // Use ffmpeg to ensure compatibility (resample to 44100Hz, standard mp3)
+    if (fs.existsSync(tempPath)) {
+        try {
+            const { execSync } = await import('child_process');
+            execSync(`ffmpeg -i "${tempPath}" -ar 44100 -ac 2 -ab 128k -f mp3 -y "${filePath}"`);
+            fs.unlinkSync(tempPath);
+        } catch (err: any) {
+            console.error(`FFmpeg error for ${slug}:`, err.message);
+            fs.renameSync(tempPath, filePath); // Fallback to raw download if ffmpeg fails
+        }
     }
-
-    await downloadAudio(expanded, filePath);
+    
     // Sleep a bit to avoid rate limits
-    await delay(500); 
+    await delay(300); 
   }
 
   console.log("Audio generation complete!");
