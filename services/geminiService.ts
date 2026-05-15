@@ -126,23 +126,25 @@ export const playAudio = async (item: StudyItem | string): Promise<void> => {
     }
   }
 
-  // Fallback...
+  // Fallback using decodeAudioData which has better compatibility on iOS than <audio>
   try {
     const slug = slugify(text);
     const audioUrl = `/audio/${slug}.mp3`;
-    const audio = new Audio(audioUrl);
     
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(error => {
-        console.warn("Audio play error, falling back to TTS", error);
-        fallbackToBrowserTTS(expandTextForAudio(text));
-      });
+    const response = await fetch(audioUrl);
+    if (!response.ok) throw new Error("Audio file missing");
+    const arrayBuffer = await response.arrayBuffer();
+    
+    if (audioCtx) {
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      const source = audioCtx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioCtx.destination);
+      source.start();
       return;
     }
   } catch (err) {
-    console.error("Audio play error", err);
-    // Ignore fetch errors, fallback to browser TTS
+    console.warn("Audio play error via AudioContext, falling back to browser TTS", err);
   }
 
   // Fallback to browser TTS if no pre-generated audio or playback fails
