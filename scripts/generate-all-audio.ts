@@ -35,8 +35,7 @@ async function main() {
     fs.mkdirSync(outDir, { recursive: true });
   }
 
-  const filteredData = DEFAULT_STUDY_DATA.filter(i => i.type === "phrase");
-  const uniquePhrases = Array.from(new Set(filteredData.map(i => i.english)));
+  const uniquePhrases = Array.from(new Set(DEFAULT_STUDY_DATA.map(i => i.english)));
 
   console.log(`Starting generation of ${uniquePhrases.length} audio files...`);
 
