@@ -25,9 +25,9 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSave }) =>
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 transform transition-all">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Settings</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">设置 (Settings)</h2>
         <p className="text-sm text-gray-600 mb-4">
-          Enter your Google Gemini API Key to enable AI-powered content parsing and high-quality Neural TTS voice.
+          输入您的 Google Gemini API Key 以启用 AI 内容解析和高质量的 Neural TTS 语音发音。(Enter your Google Gemini API Key to enable AI-powered content parsing and high-quality Neural TTS voice.)
         </p>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">API Key</label>
@@ -44,13 +44,13 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSave }) =>
             onClick={onClose}
             className="px-4 py-2 text-gray-600 hover:text-gray-800"
           >
-            Cancel
+            取消 (Cancel)
           </button>
           <button
             onClick={handleSave}
             className="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 transition-colors"
           >
-            Save Key
+            保存 (Save Key)
           </button>
         </div>
       </div>

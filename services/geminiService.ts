@@ -1,76 +1,150 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { StudyItem } from "../types";
+import { slugify } from "../constants";
 
-// Parsing service remains using Gemini (requires API Key)
 export const parseContentWithGemini = async (rawText: string, apiKey: string): Promise<StudyItem[]> => {
-  if (!apiKey) throw new Error("API Key required for content processing");
-
-  const ai = new GoogleGenAI({ apiKey });
-  
-  const prompt = `
-    You are an expert language teacher. Extract English vocabulary, phrases, and sentences along with their Chinese translations from the provided text.
-    Ignore numbers or list bullets if they are just formatting.
-    Categorize them as 'word', 'phrase', or 'sentence'.
-    **IMPORTANT**: For each 'phrase' or 'word', provide a simple English 'example' sentence to demonstrate its usage.
-    Return the result as a JSON array.
-  `;
-
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: [
-        { role: 'user', parts: [{ text: prompt }]},
-        { role: 'user', parts: [{ text: `Here is the text to process: \n${rawText}` }]}
-    ],
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.ARRAY,
-        items: {
-          type: Type.OBJECT,
-          properties: {
-            english: { type: Type.STRING },
-            chinese: { type: Type.STRING },
-            type: { type: Type.STRING, enum: ['word', 'phrase', 'sentence'] },
-            example: { type: Type.STRING }
-          },
-          required: ['english', 'chinese', 'type']
-        }
-      }
-    }
+  const response = await fetch('/api/generate-cards', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ rawText })
   });
 
-  const rawJson = response.text;
-  if (!rawJson) throw new Error("Empty response from AI");
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to generate cards');
+  }
 
-  const parsed = JSON.parse(rawJson);
-  
-  // Hydrate with ID and default stats
-  return parsed.map((item: any) => ({
-    ...item,
-    id: Math.random().toString(36).substr(2, 9),
-    stage: 0,
-    nextReviewDate: Date.now(),
-    easeFactor: 2.5
-  }));
+  return response.json();
 };
 
-// TTS Service using Youdao API (Human-like, Accessible in China)
-export const playAudio = (text: string): void => {
-  // Type 2 = American English, Type 1 = British English
-  const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
+export const expandTextForAudio = (text: string): string => {
+  let expanded = text;
+  expanded = expanded.replace(/\bsth\b/gi, "something");
+  expanded = expanded.replace(/\bsb\b/gi, "somebody");
+  expanded = expanded.replace(/\betc\.?\b/gi, "et cetera");
+  expanded = expanded.replace(/\be\.g\.\b/gi, "for example");
+  expanded = expanded.replace(/\bi\.e\.\b/gi, "that is");
+  expanded = expanded.replace(/\bvs\.?\b/gi, "versus");
+  return expanded;
+};
+
+export const preloadAudio = (item: StudyItem) => {
+  // Not needed when using raw base64 PCM or local wav files.
+};
+
+let audioCtx: AudioContext | null = null;
+
+const playPcmBase64 = async (base64: string) => {
+  if (!audioCtx) {
+    audioCtx = new AudioContext({ sampleRate: 24000 });
+  }
   
-  const audio = new Audio(url);
+  if (audioCtx.state === 'suspended') {
+    await audioCtx.resume();
+  }
+
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  const numChannels = 1;
+  const sampleRate = 24000;
   
-  audio.play().catch(e => {
-    console.warn("Youdao TTS failed, falling back to browser native", e);
-    fallbackToBrowserTTS(text);
-  });
+  // Create 16-bit PCM ArrayBuffer
+  const int16Array = new Int16Array(bytes.buffer);
+  
+  const audioBuffer = audioCtx.createBuffer(numChannels, int16Array.length, sampleRate);
+  const channelData = audioBuffer.getChannelData(0);
+  
+  for (let i = 0; i < int16Array.length; i++) {
+    channelData[i] = int16Array[i] / 32768.0;
+  }
+
+  const source = audioCtx.createBufferSource();
+  source.buffer = audioBuffer;
+  source.connect(audioCtx.destination);
+  source.start();
+};
+
+export const playAudio = async (item: StudyItem | string): Promise<void> => {
+  const text = typeof item === 'string' ? item : item.english;
+  const base64 = typeof item === 'string' ? undefined : item.audioBase64;
+  
+  if (base64) {
+    try {
+      await playPcmBase64(base64);
+      return;
+    } catch (e) {
+      console.warn("Failed to play PCM", e);
+    }
+  }
+
+  // Try fetching offline generated wav
+  try {
+    const slug = slugify(text);
+    const audioUrl = `/audio/${slug}.mp3`;
+    const res = await fetch(audioUrl, { method: 'HEAD' });
+    const contentType = res.headers.get('content-type');
+    if (res.ok && contentType && !contentType.includes('text/html')) {
+      const audio = new Audio(audioUrl);
+      audio.play().catch((err) => {
+        console.error("Audio play error", err);
+        fallbackToBrowserTTS(expandTextForAudio(text));
+      });
+      return;
+    }
+  } catch (err) {
+    // Ignore fetch errors, fallback to browser TTS
+  }
+
+  // Fallback to browser TTS if no pre-generated audio
+  fallbackToBrowserTTS(expandTextForAudio(text));
 };
 
 const fallbackToBrowserTTS = (text: string) => {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  utterance.rate = 0.85; // Slightly slower for language learning clarity
+  utterance.pitch = 1.0;
+
+  const loadVoicesAndSpeak = () => {
+    const voices = window.speechSynthesis.getVoices();
+    
+    // Priority: 
+    // 1. Google US English (Chrome)
+    // 2. Microsoft Zira/David (Edge/Windows)
+    // 3. Samantha (macOS)
+    // 4. Any online 'en-US'
+    // 5. Any 'en-US'
+    // 6. Any 'en'
+    const preferredVoice = 
+      voices.find(v => v.name === 'Google US English') ||
+      voices.find(v => v.name.includes('Microsoft Zira')) ||
+      voices.find(v => v.name.includes('Samantha')) ||
+      voices.find(v => v.lang === 'en-US' && !v.localService) ||
+      voices.find(v => v.lang === 'en-US') ||
+      voices.find(v => v.lang.startsWith('en'));
+
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+
     window.speechSynthesis.speak(utterance);
-}
+  };
+
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      loadVoicesAndSpeak();
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  } else {
+    loadVoicesAndSpeak();
+  }
+};

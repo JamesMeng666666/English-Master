@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StudyItem, StudyMode, ReviewGrade } from './types';
 import { DEFAULT_STUDY_DATA, INTERVALS } from './constants';
-import { parseContentWithGemini, playAudio } from './services/geminiService';
+import { parseContentWithGemini, playAudio, preloadAudio } from './services/geminiService';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
+import Dictation from './components/Dictation';
 import VocabularyList from './components/VocabularyList';
 import ApiKeyModal from './components/ApiKeyModal';
 
@@ -65,7 +66,9 @@ function App() {
   // Available groups
   const groups = useMemo(() => {
     const uniqueGroups = Array.from(new Set(studyData.map(item => item.group)));
-    return ['All', ...uniqueGroups.sort()];
+    // Sort in descending order with numeric comparison (e.g. 8BU10 before 8BU2)
+    uniqueGroups.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }));
+    return ['All', ...uniqueGroups];
   }, [studyData]);
 
   // Derived filtered items based on selected group
@@ -90,9 +93,18 @@ function App() {
             .sort((a, b) => a.nextReviewDate - b.nextReviewDate);
     } else if (mode === StudyMode.QUIZ) {
         return filteredStudyData.filter(i => i.stage > 0).sort(() => 0.5 - Math.random());
+    } else if (mode === StudyMode.DICTATION) {
+        return filteredStudyData.filter(i => i.type === 'sentence').sort(() => 0.5 - Math.random());
     }
     return [];
   }, [filteredStudyData, mode]);
+
+  // Preload audio for all items in the session queue to ensure instant playback
+  useEffect(() => {
+    sessionQueue.forEach(item => {
+      preloadAudio(item.english);
+    });
+  }, [sessionQueue]);
 
   const currentItem = sessionQueue[currentCardIndex];
 
@@ -199,8 +211,8 @@ function App() {
             <h1 className="text-lg md:text-xl font-bold text-gray-800 tracking-tight">词组记忆</h1>
         </div>
         <div className="flex gap-2 md:gap-3">
-             <button onClick={() => setMode(StudyMode.DASHBOARD)} className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium transition-colors ${mode === StudyMode.DASHBOARD ? 'bg-indigo-50 text-primary' : 'text-gray-500 hover:text-gray-900'}`}>Dashboard</button>
-            <button onClick={() => setShowKeyModal(true)} className="p-1.5 md:p-2 text-gray-400 hover:text-gray-600" title="Settings">
+             <button onClick={() => setMode(StudyMode.DASHBOARD)} className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium transition-colors ${mode === StudyMode.DASHBOARD ? 'bg-indigo-50 text-primary' : 'text-gray-500 hover:text-gray-900'}`}>仪表盘 (Dashboard)</button>
+            <button onClick={() => setShowKeyModal(true)} className="p-1.5 md:p-2 text-gray-400 hover:text-gray-600" title="设置 (Settings)">
                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             </button>
         </div>
@@ -211,7 +223,7 @@ function App() {
           <div className="w-full max-w-4xl space-y-4 md:space-y-6">
             {/* Group Switcher */}
             <div className="flex items-center justify-between gap-3">
-                <h2 className="text-base md:text-lg font-bold text-gray-800 shrink-0">Study Group</h2>
+                <h2 className="text-base md:text-lg font-bold text-gray-800 shrink-0">学习分组 (Study Group)</h2>
                 <div className="flex-1 min-w-0">
                     <div className="flex overflow-x-auto bg-surface rounded-xl p-1.5 border border-gray-100 no-scrollbar touch-pan-x shadow-sm">
                         {groups.map(g => (
@@ -228,7 +240,7 @@ function App() {
             </div>
 
             {/* Main Action Buttons - Eye Friendly Colors */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
               <button
                 onClick={() => { setMode(StudyMode.FLASHCARD); setCurrentCardIndex(0); }}
                 disabled={stats.due === 0}
@@ -238,8 +250,8 @@ function App() {
                     <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 </div>
                 <div>
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-primary transition-colors">Review Cards</h3>
-                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">{stats.due} items due</p>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-primary transition-colors">卡片复习 (Review Cards)</h3>
+                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">待复习 (Due): {stats.due}</p>
                 </div>
               </button>
 
@@ -251,8 +263,21 @@ function App() {
                     <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 </div>
                  <div>
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-secondary transition-colors">Practice Quiz</h3>
-                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">Fill-in-the-blanks</p>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-secondary transition-colors">练习测验 (Practice Quiz)</h3>
+                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">填空题 (Fill-in)</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => { setMode(StudyMode.DICTATION); setCurrentCardIndex(0); }}
+                className="bg-white border-2 border-green-500/10 hover:border-green-500/30 text-gray-800 p-4 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-row md:flex-col items-center justify-start md:justify-center gap-4 group text-left md:text-center"
+              >
+                 <div className="bg-green-500/10 p-3 md:p-4 rounded-full shrink-0 group-hover:bg-green-500 group-hover:text-white transition-colors text-green-500">
+                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                </div>
+                 <div>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">听写 (Dictation)</h3>
+                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">听音拼写 (Listen & Type)</p>
                 </div>
               </button>
 
@@ -264,8 +289,8 @@ function App() {
                     <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                 </div>
                  <div>
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors">View List</h3>
-                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">Show all items</p>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors">查看列表 (View List)</h3>
+                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">显示全部 (Show all)</p>
                 </div>
               </button>
             </div>
@@ -274,30 +299,30 @@ function App() {
             <div className="grid grid-cols-3 gap-3 md:gap-4">
               <div className="bg-surface p-3 md:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
                 <span className="text-xl md:text-2xl font-bold text-primary">{stats.due}</span>
-                <span className="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider font-semibold">Due</span>
+                <span className="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider font-semibold">待复习 (Due)</span>
               </div>
               <div className="bg-surface p-3 md:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
                 <span className="text-xl md:text-2xl font-bold text-secondary">{stats.mastered}</span>
-                <span className="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider font-semibold">Mastered</span>
+                <span className="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider font-semibold">已掌握 (Mastered)</span>
               </div>
               <div className="bg-surface p-3 md:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
                 <span className="text-xl md:text-2xl font-bold text-gray-800">{stats.total}</span>
-                <span className="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider font-semibold">Total</span>
+                <span className="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider font-semibold">总词数 (Total)</span>
               </div>
             </div>
 
             {/* Add Content - Redesigned Input for Visibility */}
             <div className="bg-surface p-4 md:p-8 rounded-2xl shadow-sm border border-gray-100 relative">
                 <div className="flex justify-between items-center mb-4 md:mb-5">
-                     <h3 className="text-base md:text-lg font-bold text-gray-800">Add New Content</h3>
-                     <button onClick={handleResetToDefault} className="text-xs text-gray-400 hover:text-primary hover:underline font-medium">Reset Default</button>
+                     <h3 className="text-base md:text-lg font-bold text-gray-800">添加新内容 (Add New Content)</h3>
+                     <button onClick={handleResetToDefault} className="text-xs text-gray-400 hover:text-primary hover:underline font-medium">重置默认 (Reset Default)</button>
                 </div>
                 
                 <div className="space-y-4">
                   {/* High visibility Input Group */}
                   <div className="flex items-center gap-3 bg-gray-50 p-1.5 rounded-xl border border-gray-200 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-all">
                      <div className="bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm shrink-0">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Group</label>
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">分组(Group)</label>
                      </div>
                      <input 
                         type="text" 
@@ -317,7 +342,7 @@ function App() {
                   />
                   
                   <button onClick={handleParseContent} disabled={isProcessing} className="w-full md:w-auto px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 disabled:opacity-70 transition-colors flex items-center justify-center gap-2 text-sm md:text-base font-medium shadow-md hover:shadow-lg transform active:scale-[0.98] duration-100">
-                      {isProcessing ? (<><svg className="animate-spin h-4 w-4 md:h-5 md:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...</>) : (<><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>Generate Cards with AI</>)}
+                      {isProcessing ? (<><svg className="animate-spin h-4 w-4 md:h-5 md:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>处理中(Processing)...</>) : (<><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>使用 AI 生成卡片 (Generate Cards)</>)}
                   </button>
                 </div>
             </div>
@@ -327,7 +352,7 @@ function App() {
         {mode === StudyMode.FLASHCARD && (
           <div className="w-full max-w-4xl flex flex-col items-center justify-center min-h-[60vh]">
             <div className="mb-8 w-full flex justify-between items-center px-4">
-                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1 font-medium"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>Back to Dashboard</button>
+                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1 font-medium"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>返回仪表盘 (Back)</button>
                  <span className="text-xs md:text-sm font-bold px-3 py-1 bg-white rounded-full text-gray-500 border border-gray-100 shadow-sm">{selectedGroup} <span className="text-gray-300 mx-1">|</span> {currentCardIndex + 1} / {sessionQueue.length}</span>
             </div>
             {currentItem ? (<Flashcard item={currentItem} onResult={(grade) => updateCardProgress(currentItem.id, grade)} onPlayAudio={handlePlayAudio} />) : (
@@ -335,25 +360,41 @@ function App() {
                 <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">All Caught Up!</h2>
-                <p className="text-gray-500 mb-6">No more cards due for <strong>{selectedGroup}</strong> right now.</p>
-                <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-3 bg-primary text-white rounded-xl shadow-md hover:bg-primary-dark transition-colors font-medium">Back to Dashboard</button>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">已全部复习完毕！(All Caught Up!)</h2>
+                <p className="text-gray-500 mb-6">现在没有需要复习的 <strong>{selectedGroup}</strong> 卡片。(No more cards due right now.)</p>
+                <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-3 bg-primary text-white rounded-xl shadow-md hover:bg-primary-dark transition-colors font-medium">返回仪表盘 (Back to Dashboard)</button>
               </div>
             )}
           </div>
         )}
 
-        {mode === StudyMode.QUIZ && (
+         {mode === StudyMode.QUIZ && (
           <div className="w-full max-w-4xl flex flex-col items-center justify-center min-h-[60vh]">
              <div className="mb-8 w-full flex justify-between items-center px-4">
-                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1 font-medium"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>Quit Quiz</button>
-                 <span className="text-xs md:text-sm font-bold px-3 py-1 bg-white rounded-full text-gray-500 border border-gray-100 shadow-sm">Question {currentCardIndex + 1} / {sessionQueue.length}</span>
+                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1 font-medium"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>退出测验 (Quit Quiz)</button>
+                 <span className="text-xs md:text-sm font-bold px-3 py-1 bg-white rounded-full text-gray-500 border border-gray-100 shadow-sm">问题 (Question) {currentCardIndex + 1} / {sessionQueue.length}</span>
             </div>
             {currentItem ? (<Quiz item={currentItem} onComplete={() => { if (currentCardIndex < sessionQueue.length - 1) { setCurrentCardIndex(prev => prev + 1); } else { alert("Quiz Complete!"); setMode(StudyMode.DASHBOARD); } }} />) : (
                 <div className="text-center bg-surface p-8 rounded-3xl shadow-sm border border-gray-100">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Not Enough Data</h2>
-                    <p className="text-gray-500 mb-6">Review {selectedGroup} flashcards first to unlock quizzes.</p>
-                    <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-3 bg-primary text-white rounded-xl shadow-md hover:bg-primary-dark transition-colors font-medium">Back to Dashboard</button>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">数据不足 (Not Enough Data)</h2>
+                    <p className="text-gray-500 mb-6">请先通过闪卡复习 {selectedGroup} 来解锁测验。(Review flashcards first to unlock quizzes.)</p>
+                    <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-3 bg-primary text-white rounded-xl shadow-md hover:bg-primary-dark transition-colors font-medium">返回仪表盘 (Back to Dashboard)</button>
+                </div>
+             )}
+          </div>
+        )}
+
+        {mode === StudyMode.DICTATION && (
+          <div className="w-full max-w-4xl flex flex-col items-center justify-center min-h-[60vh]">
+             <div className="mb-8 w-full flex justify-between items-center px-4">
+                 <button onClick={() => setMode(StudyMode.DASHBOARD)} className="text-gray-500 hover:text-gray-800 flex items-center gap-1 font-medium"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>退出听写 (Quit Dictation)</button>
+                 <span className="text-xs md:text-sm font-bold px-3 py-1 bg-white rounded-full text-gray-500 border border-gray-100 shadow-sm">句子 (Sentence) {currentCardIndex + 1} / {sessionQueue.length}</span>
+            </div>
+            {currentItem ? (<Dictation item={currentItem} onComplete={() => { if (currentCardIndex < sessionQueue.length - 1) { setCurrentCardIndex(prev => prev + 1); } else { alert("Dictation Complete!"); setMode(StudyMode.DASHBOARD); } }} onPlayAudio={handlePlayAudio} />) : (
+                <div className="text-center bg-surface p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">未找到句子 (No Sentences Found)</h2>
+                    <p className="text-gray-500 mb-6">{selectedGroup} 分组下没有可听写的句子。(There are no sentences available to dictate.)</p>
+                    <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-3 bg-primary text-white rounded-xl shadow-md hover:bg-primary-dark transition-colors font-medium">返回仪表盘 (Back to Dashboard)</button>
                 </div>
              )}
           </div>

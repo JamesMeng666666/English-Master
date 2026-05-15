@@ -39,14 +39,14 @@ const Quiz: React.FC<QuizProps> = ({ item, onComplete }) => {
   return (
     <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
       <div className="mb-6">
-        <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Translate this</span>
+        <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">翻译下面内容 (Translate this)</span>
         <h3 className="text-xl md:text-2xl text-gray-800 mt-2 font-medium">{item.chinese}</h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            English Translation
+            英文翻译 (English Translation)
           </label>
           <input
             type="text"
@@ -60,14 +60,14 @@ const Quiz: React.FC<QuizProps> = ({ item, onComplete }) => {
                 ? 'border-red-500 bg-red-50'
                 : 'border-gray-200 focus:border-primary'
             }`}
-            placeholder="Type the English translation..."
+            placeholder="输入英文翻译 (Type the English translation...)"
             autoFocus
           />
         </div>
 
         {feedback === 'incorrect' && (
           <div className="p-4 bg-red-50 rounded-lg text-red-700">
-            <p className="font-bold">Correct Answer:</p>
+            <p className="font-bold">正确答案 (Correct Answer):</p>
             <p>{item.english}</p>
           </div>
         )}
@@ -79,7 +79,7 @@ const Quiz: React.FC<QuizProps> = ({ item, onComplete }) => {
              disabled={!input.trim()}
              className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-md transition-transform active:scale-95"
            >
-             Check Answer
+             检查答案 (Check Answer)
            </button>
           ) : (
             <button
@@ -89,7 +89,7 @@ const Quiz: React.FC<QuizProps> = ({ item, onComplete }) => {
                   feedback === 'correct' ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-800 hover:bg-gray-900'
               }`}
             >
-              Next Question &rarr;
+              下一题 (Next Question) &rarr;
             </button>
           )}
         </div>

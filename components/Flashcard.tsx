@@ -41,7 +41,7 @@ const Flashcard: React.FC<FlashcardProps> = ({ item, onResult, onPlayAudio }) =>
           </div>
           <h2 className="text-3xl font-bold text-gray-800 mb-6 leading-snug">{item.chinese}</h2>
           <div className="text-gray-400 text-xs font-medium uppercase tracking-widest absolute bottom-6 flex items-center gap-2">
-            <span>Tap to Reveal</span>
+            <span>点击查看答案 (Tap to Reveal)</span>
           </div>
         </div>
 
@@ -62,10 +62,10 @@ const Flashcard: React.FC<FlashcardProps> = ({ item, onResult, onPlayAudio }) =>
 
       {/* Grading Buttons */}
       <div className={`transition-opacity duration-300 grid grid-cols-4 gap-3 mt-6 ${isFlipped ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <button onClick={() => onResult('AGAIN')} className="flex flex-col items-center justify-center bg-white border border-rose-100 hover:bg-rose-50 text-rose-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">Again</span><span className="text-[10px] opacity-70">1m</span></button>
-        <button onClick={() => onResult('HARD')} className="flex flex-col items-center justify-center bg-white border border-orange-100 hover:bg-orange-50 text-orange-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">Hard</span><span className="text-[10px] opacity-70">Same</span></button>
-        <button onClick={() => onResult('GOOD')} className="flex flex-col items-center justify-center bg-white border border-blue-100 hover:bg-blue-50 text-blue-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">Good</span><span className="text-[10px] opacity-70">1d</span></button>
-        <button onClick={() => onResult('EASY')} className="flex flex-col items-center justify-center bg-white border border-emerald-100 hover:bg-emerald-50 text-emerald-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">Easy</span><span className="text-[10px] opacity-70">4d</span></button>
+        <button onClick={() => onResult('AGAIN')} className="flex flex-col items-center justify-center bg-white border border-rose-100 hover:bg-rose-50 text-rose-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">重来 (Again)</span><span className="text-[10px] opacity-70">1m</span></button>
+        <button onClick={() => onResult('HARD')} className="flex flex-col items-center justify-center bg-white border border-orange-100 hover:bg-orange-50 text-orange-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">困难 (Hard)</span><span className="text-[10px] opacity-70">不变</span></button>
+        <button onClick={() => onResult('GOOD')} className="flex flex-col items-center justify-center bg-white border border-blue-100 hover:bg-blue-50 text-blue-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">良好 (Good)</span><span className="text-[10px] opacity-70">1d</span></button>
+        <button onClick={() => onResult('EASY')} className="flex flex-col items-center justify-center bg-white border border-emerald-100 hover:bg-emerald-50 text-emerald-600 py-3 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95"><span className="font-bold text-sm">简单 (Easy)</span><span className="text-[10px] opacity-70">4d</span></button>
       </div>
     </div>
   );

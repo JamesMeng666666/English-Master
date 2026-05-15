@@ -32,8 +32,8 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
     <div className="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col h-[85vh]">
       <div className="p-6 border-b border-gray-100 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white rounded-t-2xl z-10">
         <div>
-           <h2 className="text-2xl font-bold text-gray-800">Vocabulary List</h2>
-           <p className="text-gray-500 text-sm mt-1">Reviewing {filteredItems.length} items</p>
+           <h2 className="text-2xl font-bold text-gray-800">词汇列表 (Vocabulary List)</h2>
+           <p className="text-gray-500 text-sm mt-1">当前有 (Reviewing) {filteredItems.length} 项</p>
         </div>
        
         <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
@@ -42,7 +42,7 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
                     type="text" 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search..."
+                    placeholder="搜索 (Search)..."
                     className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none w-full xl:w-64 transition-all placeholder-gray-400 bg-gray-50 focus:bg-white"
                 />
                 <svg className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -64,13 +64,13 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
                             filter === f ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'
                         }`}
                     >
-                        {f === 'all' ? 'All' : f + 's'}
+                        {f === 'all' ? '全部 (All)' : f === 'phrase' ? '词组 (Phrases)' : '句子 (Sentences)'}
                     </button>
                 ))}
             </div>
             <button onClick={onBack} className="px-4 py-2 text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors flex items-center gap-2 font-medium ml-auto xl:ml-0">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Back
+                返回 (Back)
             </button>
         </div>
       </div>
@@ -94,12 +94,12 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
               </div>
               <div className="flex items-center gap-4 w-full md:w-auto mt-2 md:mt-0 justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-gray-50">
                   <div className="text-right mr-2 flex md:block items-center gap-2">
-                      <div className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold mb-1">Memory</div>
+                      <div className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold mb-1">记忆 (Memory)</div>
                       <div className="flex items-center gap-1 justify-end">
                         {Array.from({length: 6}).map((_, i) => (<div key={i} className={`h-1.5 w-1.5 rounded-full ${i <= item.stage ? 'bg-secondary' : 'bg-gray-200'}`} />))}
                       </div>
                   </div>
-                  <button onClick={() => onDelete(item.id)} className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                  <button onClick={() => onDelete(item.id)} className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="删除 (Delete)"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
               </div>
             </div>
           ))) : (
@@ -107,7 +107,7 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
                   <div className="text-gray-300 mb-2">
                     <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   </div>
-                  <p className="text-gray-400">No items found.</p>
+                  <p className="text-gray-400">未找到项 (No items found.)</p>
               </div>
           )}
         </div>

@@ -10,7 +10,8 @@ export enum StudyMode {
   QUIZ = 'QUIZ',
   INPUT = 'INPUT',
   DASHBOARD = 'DASHBOARD',
-  LIST = 'LIST'
+  LIST = 'LIST',
+  DICTATION = 'DICTATION'
 }
 
 export type ReviewGrade = 'AGAIN' | 'HARD' | 'GOOD' | 'EASY';
@@ -22,6 +23,7 @@ export interface StudyItem {
   group: string; // Added field for categorization (e.g., 8AU5, 8AU6)
   type: 'word' | 'phrase' | 'sentence';
   example?: string;
+  audioBase64?: string;
   
   // Ebbinghaus properties
   stage: number; // 0 to 5

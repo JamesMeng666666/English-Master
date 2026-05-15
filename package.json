@@ -4,20 +4,26 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "tsx server.ts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "lint": "tsc",
+    "start": "node dist/server.cjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/genai": "^1.35.0",
+    "express": "^5.2.1",
+    "google-tts-api": "^2.0.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "uuid": "^13.0.0",
-    "@google/genai": "^1.35.0"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "esbuild": "^0.28.0",
+    "tsx": "^4.22.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

@@ -1,5 +1,9 @@
 import { StudyItem } from './types';
 
+export const slugify = (text: string) => {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+};
+
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export const DEFAULT_STUDY_DATA: StudyItem[] = [
@@ -470,6 +474,45 @@ export const DEFAULT_STUDY_DATA: StudyItem[] = [
   { id: generateId(), group: "8BU4", english: "Dwelling in the Fuchun Mountains was such an amazing painting that it was copied by hundreds of artists.", chinese: "《富春山居图》是如此出色的一幅画，以至于被数百位艺术家临摹。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
   { id: generateId(), group: "8BU4", english: "Now, people all over the world can explore the unique art of the Mogao Caves without leaving their homes.", chinese: "如今，世界各地的人们足不出户就能探索莫高窟的独特艺术。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
   { id: generateId(), group: "8BU4", english: "The longer I've stayed here, the deeper my love has grown for Dunhuang.", chinese: "我在这里待得越久，对敦煌的爱就越深。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+
+  // --- 8BU5 Phrases ---
+  { id: generateId(), group: "8BU5", english: "be in danger", chinese: "处于危险中", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "more than enough to do sth.", chinese: "做……绰绰有余", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "shoot dead", chinese: "枪杀;击毙", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "make use of", chinese: "使用;利用", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "force sb. to do sth.", chinese: "强迫某人做某事", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "be able to do sth.", chinese: "能够做某事", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "search for / look for", chinese: "寻找;搜索", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "in the right direction", chinese: "朝着正确的方向", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "without a care in the world", chinese: "无忧无虑", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "due to = because of...", chinese: "由于;因为", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "make efforts to do sth.", chinese: "努力做某事", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "what's worse", chinese: "更糟糕的是", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "too + adj. + to do sth.", chinese: "太……而不能做", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "throw ... into ...", chinese: "把……扔进……", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "stop doing sth. / stop to do sth.", chinese: "停止做…… / 停下来去做另一件事情", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "ought to do sth.", chinese: "应该;应当", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "up to", chinese: "到达(某数量、程度等);至多有", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "cut down", chinese: "砍倒", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "attract one's attention", chinese: "吸引某人的注意", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "in fact", chinese: "事实上", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "nature reserve", chinese: "自然保护区", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "a symbol of", chinese: "……的象征", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "day and night", chinese: "夜以继日", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "go missing", chinese: "失踪;不见", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "decide to do sth.", chinese: "决定做某事", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "return to sp.", chinese: "返回某地", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "lose one's life", chinese: "牺牲生命", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "in memory of", chinese: "纪念", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "set up", chinese: "建立;设立", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "under threat", chinese: "受到威胁", type: 'phrase', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+
+  // --- 8BU5 Sentences ---
+  { id: generateId(), group: "8BU5", english: "They swim in the river and play when they feel like it.", chinese: "他们想游泳就游泳，想玩就玩。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "This is a world of harmony between man and other animals.", chinese: "这是一个人和动物和谐共存的世界。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "I think it is wrong of them to sell products made from animals in danger.", chinese: "我认为他们出售由濒危动物制成的产品是错误的。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "Whenever a bird became sick, she would stay with it day and night until it was strong enough to fly again.", chinese: "每当一只鸟生病，她就会日夜陪伴直到它足够强壮可以再次飞翔。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
+  { id: generateId(), group: "8BU5", english: "Since it is typical of swans to feed in the wetlands, she decided to look for the birds there.", chinese: "因为天鹅通常在湿地觅食，她决定去那里寻找。", type: 'sentence', stage: 0, nextReviewDate: Date.now(), easeFactor: 2.5 },
 ];
 
 export const INTERVALS = [
