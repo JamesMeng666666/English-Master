@@ -65,7 +65,7 @@ function App() {
 
   // Available groups
   const groups = useMemo(() => {
-    const uniqueGroups = Array.from(new Set(studyData.map(item => item.group)));
+    const uniqueGroups = Array.from(new Set(studyData.map(item => item.group))) as string[];
     // Sort in descending order with numeric comparison (e.g. 8BU10 before 8BU2)
     uniqueGroups.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }));
     return ['All', ...uniqueGroups];

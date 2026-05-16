@@ -47,7 +47,31 @@ export const preloadAudio = async (item: StudyItem) => {
   }
 };
 
-let audioCtx: window.AudioContext | null = null;
+let audioCtx: AudioContext | null = null;
+
+export const initAudio = () => {
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+  if (!audioCtx && AudioContextClass) {
+    audioCtx = new AudioContextClass({ sampleRate: 24000 });
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  
+  // Play a silent buffer to truly unlock audio on iOS
+  if (audioCtx) {
+    const buffer = audioCtx.createBuffer(1, 1, 22050);
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioCtx.destination);
+    if (source.start) {
+      source.start(0);
+    } else if ((source as any).noteOn) {
+      (source as any).noteOn(0);
+    }
+  }
+};
+
 
 const playPcmBase64 = async (base64: string) => {
   const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
@@ -136,7 +160,12 @@ export const playAudio = async (item: StudyItem | string): Promise<void> => {
     const arrayBuffer = await response.arrayBuffer();
     
     if (audioCtx) {
-      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      const audioBuffer = await new Promise<AudioBuffer>((resolve, reject) => {
+        const promise = audioCtx!.decodeAudioData(arrayBuffer, resolve, reject);
+        if (promise) {
+          promise.catch(reject);
+        }
+      });
       const source = audioCtx.createBufferSource();
       source.buffer = audioBuffer;
       source.connect(audioCtx.destination);

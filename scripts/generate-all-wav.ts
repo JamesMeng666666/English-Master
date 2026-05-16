@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { DEFAULT_STUDY_DATA, slugify } from '../src/constants.js'; // Note context switch if running from package root
+import { DEFAULT_STUDY_DATA, slugify } from '../constants';
 import { GoogleGenAI } from '@google/genai';
 
 // Simple WAV header creation
