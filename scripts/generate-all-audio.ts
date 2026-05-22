@@ -35,9 +35,12 @@ async function main() {
     fs.mkdirSync(outDir, { recursive: true });
   }
 
-  const uniquePhrases = Array.from(new Set(DEFAULT_STUDY_DATA.map(i => i.english)));
+  const groupArg = process.argv.find(arg => arg.startsWith('--group='));
+  const group = groupArg ? groupArg.split('=')[1] : undefined;
+  const filteredData = group ? DEFAULT_STUDY_DATA.filter(i => i.group === group) : DEFAULT_STUDY_DATA;
+  const uniquePhrases = Array.from(new Set(filteredData.map(i => i.english)));
 
-  console.log(`Starting generation of ${uniquePhrases.length} audio files...`);
+  console.log(`Starting generation of ${uniquePhrases.length} audio files${group ? ` for group ${group}` : ''}...`);
 
   for (let i = 0; i < uniquePhrases.length; i++) {
     const phrase = uniquePhrases[i];
