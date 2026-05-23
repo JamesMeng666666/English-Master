@@ -68,20 +68,89 @@ const playAudioUrl = async (url: string) => {
 };
 
 export const parseContentWithGemini = async (rawText: string, apiKey: string): Promise<StudyItem[]> => {
-  const response = await fetch('/api/generate-cards', {
+  const prompt = `You are an expert language teacher. Parse the following text into a list of English-Chinese study items. Each item consists of an English entry followed by its Chinese translation on the next line (or same line separated by space/dash).
+
+Rules:
+- Categorize each item as: 'word' (single word), 'phrase' (multi-word expression that is NOT a complete sentence), or 'sentence' (complete sentence with subject and verb).
+- Do NOT break sentences into individual words or phrases. A sentence is a standalone entry.
+- Do NOT extract words from phrases. Each entry is independent.
+- For 'word' or 'phrase' items, add an 'example' field with a simple English sentence showing usage.
+- Ignore headers like "Unit X", formatting marks, and empty lines.
+- Return the result as a JSON array.`;
+
+  const schema = {
+    type: "ARRAY",
+    items: {
+      type: "OBJECT",
+      properties: {
+        english: { type: "STRING" },
+        chinese: { type: "STRING" },
+        type: { type: "STRING", enum: ["word", "phrase", "sentence"] },
+        example: { type: "STRING" }
+      },
+      required: ["english", "chinese", "type"]
+    }
+  };
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+  const response = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ rawText })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [
+        { role: 'user', parts: [{ text: prompt }] },
+        { role: 'user', parts: [{ text: `Here is the text to process: \n${rawText}` }] }
+      ],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: schema
+      }
+    })
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to generate cards');
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error: ${response.status}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!rawJson) throw new Error("Empty response from AI");
+
+  const parsed = JSON.parse(rawJson);
+  return parsed.map((item: any) => ({
+    ...item,
+    id: Math.random().toString(36).substring(2, 9),
+    stage: 0,
+    nextReviewDate: Date.now(),
+    easeFactor: 2.5,
+    audioBase64: ''
+  }));
+};
+
+export const fetchTTSAudio = async (text: string, apiKey: string): Promise<string | null> => {
+  try {
+    const expanded = expandTextForAudio(text);
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: `Say clearly: ${expanded}` }] }],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } }
+          }
+        }
+      })
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
+  } catch {
+    return null;
+  }
 };
 
 export const expandTextForAudio = (text: string): string => {

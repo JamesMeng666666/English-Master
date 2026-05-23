@@ -244,6 +244,41 @@ function App() {
             {/* Group Switcher */}
             <div className="flex items-center justify-between gap-3">
                 <h2 className="text-base md:text-lg font-bold text-gray-800 shrink-0">学习分组 (Study Group)</h2>
+                {selectedGroup !== 'All' && (
+                  <button
+                    onClick={async () => {
+                      const items = studyData.filter(i => i.group === selectedGroup);
+                      const btn = document.activeElement as HTMLButtonElement;
+                      const origText = btn.textContent;
+                      try {
+                        btn.textContent = '生成中...';
+                        btn.disabled = true;
+
+                        const res = await fetch('/api/download-package', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ groupName: selectedGroup, items })
+                        });
+                        if (!res.ok) throw new Error('Failed');
+                        const blob = await res.blob();
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${selectedGroup}.zip`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      } catch (e) {
+                        alert('下载失败');
+                      } finally {
+                        btn.textContent = origText;
+                        btn.disabled = false;
+                      }
+                    }}
+                    className="shrink-0 px-3 py-1.5 text-xs font-medium rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors"
+                  >
+                    下载 (Download)
+                  </button>
+                )}
                 <div className="flex-1 min-w-0">
                     <div className="flex overflow-x-auto bg-surface rounded-xl p-1.5 border border-gray-100 no-scrollbar touch-pan-x shadow-sm">
                         {groups.map(g => (

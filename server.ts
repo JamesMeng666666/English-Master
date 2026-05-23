@@ -1,10 +1,31 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import archiver from "archiver";
+import { createRequire } from "node:module";
 import { createServer as createViteServer } from "vite";
+
+const require = createRequire(import.meta.url);
+const { ZipArchive } = require("archiver");
+const googleTTS = require("google-tts-api");
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { loadPackagesData, getPackageNames } from "./lib/packages";
+
+// Load .env.local into process.env (Vite does this for the client bundle, not for the server process)
+const envLocalPath = path.join(process.cwd(), '.env.local');
+if (fs.existsSync(envLocalPath)) {
+  const lines = fs.readFileSync(envLocalPath, 'utf-8').split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#')) {
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx > 0) {
+        const key = trimmed.slice(0, eqIdx).trim();
+        const val = trimmed.slice(eqIdx + 1).trim();
+        if (!process.env[key]) process.env[key] = val;
+      }
+    }
+  }
+}
 
 const expandTextForAudio = (text: string): string => {
   let expanded = text;
@@ -157,6 +178,82 @@ async function startServer() {
     }
   });
 
+  app.get("/api/download-package/:groupName", (req, res) => {
+    try {
+      const { groupName } = req.params;
+      const pkgDir = path.join(process.cwd(), 'public', 'packages', groupName);
+      if (!fs.existsSync(pkgDir)) {
+        return res.status(404).json({ error: "Package not found" });
+      }
+
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="${groupName}.zip"`);
+
+      const archive = new ZipArchive({ zlib: { level: 9 } });
+      archive.on('error', (err) => { throw err; });
+      archive.pipe(res);
+      archive.directory(pkgDir, groupName);
+      archive.finalize();
+    } catch (e: any) {
+      console.error(e);
+      if (!res.headersSent) res.status(500).json({ error: e.message || "Failed" });
+    }
+  });
+
+  app.post("/api/download-package", async (req, res) => {
+    try {
+      const { groupName, items } = req.body;
+      if (!groupName || !items || !Array.isArray(items)) return res.status(400).json({ error: "Invalid data" });
+
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="${groupName}.zip"`);
+
+      const archive = new ZipArchive({ zlib: { level: 9 } });
+      archive.on('error', (err) => { throw err; });
+      archive.pipe(res);
+
+      archive.append(JSON.stringify(items, null, 2), { name: `${groupName}/data.json` });
+
+      // Include existing audio files from packages directory
+      const audioDir = path.join(process.cwd(), 'public', 'packages', groupName, 'audio');
+      const existingFiles = new Set<string>();
+      if (fs.existsSync(audioDir)) {
+        for (const file of fs.readdirSync(audioDir)) {
+          archive.file(path.join(audioDir, file), { name: `${groupName}/audio/${file}` });
+          existingFiles.add(file);
+        }
+      }
+
+      // Generate missing audio via Google Translate TTS
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const fileName = item.audioFileName || `${item.english.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40)}.mp3`;
+        if (existingFiles.has(fileName)) continue;
+
+        try {
+          const url = googleTTS.getAudioUrl(item.english, { lang: 'en', slow: false, host: 'https://translate.google.com' });
+          const ttsRes = await fetch(url);
+          if (ttsRes.ok) {
+            const buffer = Buffer.from(await ttsRes.arrayBuffer());
+            archive.append(buffer, { name: `${groupName}/audio/${fileName}` });
+          }
+        } catch (e) {
+          console.error(`TTS failed for: ${item.english}`);
+        }
+
+        // Delay to avoid rate limiting
+        if (i < items.length - 1) {
+          await new Promise(r => setTimeout(r, 1500));
+        }
+      }
+
+      archive.finalize();
+    } catch (e: any) {
+      console.error(e);
+      if (!res.headersSent) res.status(500).json({ error: e.message || "Failed" });
+    }
+  });
+
   app.post("/api/export-package", async (req, res) => {
     try {
       const { groupName, items } = req.body;
@@ -178,7 +275,7 @@ async function startServer() {
       res.setHeader('Content-Type', 'application/zip');
       res.setHeader('Content-Disposition', `attachment; filename="${groupName}_package.zip"`);
       
-      const archive = archiver('zip', { zlib: { level: 9 } });
+      const archive = new ZipArchive({ zlib: { level: 9 } });
       archive.on('error', (err) => { throw err; });
       archive.pipe(res);
 
