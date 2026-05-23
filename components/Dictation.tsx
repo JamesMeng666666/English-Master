@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StudyItem } from '../types';
 import { getAudioFileNameCandidates } from '../constants';
+import { findFirstAvailableAudioUrl, preloadAudio } from '../services/geminiService';
 
 interface DictationProps {
   item: StudyItem;
@@ -37,6 +38,7 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
   const [isRevealed, setIsRevealed] = useState(false);
   const [audioStatus, setAudioStatus] = useState<'loading' | 'ready' | 'missing' | 'error'>('loading');
   const [audioMessage, setAudioMessage] = useState('');
+  const [audioSource, setAudioSource] = useState<'local' | 'server-tts' | 'browser-tts' | 'preloaded' | 'unknown' | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -57,41 +59,54 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
     setIsPlaying(false);
 
     const loadLocalAudio = async () => {
-      const audioNames = getAudioFileNameCandidates(item);
-      const urls = audioNames.map(fileName => `/audio/${fileName}`);
+      try {
+        const local = await findFirstAvailableAudioUrl(item);
+        if (local) {
+          // fetch and decode to compute waveform and duration
+          try {
+            const res = await fetch(local);
+            if (res.ok) {
+              const arrayBuffer = await res.arrayBuffer();
+              const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+              if (AudioContextClass) {
+                const ctx = new AudioContextClass({ sampleRate: 24000 });
+                const audioBuffer = await new Promise<AudioBuffer>((resolve, reject) => {
+                  const promise = ctx.decodeAudioData(arrayBuffer, resolve, reject);
+                  if (promise) promise.catch(reject);
+                });
+                await ctx.close();
 
-      for (const url of urls) {
-        try {
-          const response = await fetch(url);
-          if (!response.ok) continue;
-
-          const arrayBuffer = await response.arrayBuffer();
-          const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-          if (!AudioContextClass) throw new Error('AudioContext not supported');
-
-          const ctx = new AudioContextClass({ sampleRate: 24000 });
-          const audioBuffer = await new Promise<AudioBuffer>((resolve, reject) => {
-            const promise = ctx.decodeAudioData(arrayBuffer, resolve, reject);
-            if (promise) {
-              promise.catch(reject);
+                setAudioUrl(local);
+                setDuration(audioBuffer.duration);
+                setWaveformData(computeWaveform(audioBuffer));
+                setAudioStatus('ready');
+                setAudioSource('local');
+                return;
+              }
             }
-          });
-          await ctx.close();
-
-          setAudioUrl(url);
-          setDuration(audioBuffer.duration);
-          setWaveformData(computeWaveform(audioBuffer));
-          setAudioStatus('ready');
-          return;
-        } catch (error) {
-          continue;
+          } catch (e) {
+            // ignore and fallthrough
+          }
         }
-      }
 
-      setAudioStatus('missing');
-      setAudioMessage(
-        `预生成音频文件未下载或文件名不匹配。请检查链接： ${urls.join(' 或 ')}`
-      );
+        // try server TTS preload to see if server can generate
+        await preloadAudio(item);
+        if ((item as any).audioBase64) {
+          setAudioStatus('missing');
+          setAudioSource('server-tts');
+          setAudioMessage('未找到本地音频；可通过服务器 TTS 生成');
+          return;
+        }
+
+        // fallback: browser TTS
+        setAudioStatus('missing');
+        setAudioSource('browser-tts');
+        setAudioMessage('未找到本地音频；将回退到浏览器语音合成 (SpeechSynthesis)');
+      } catch (err) {
+        setAudioStatus('missing');
+        setAudioSource('unknown');
+        setAudioMessage('检查音频时发生错误');
+      }
     };
 
     loadLocalAudio();
@@ -155,6 +170,9 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
             <div>
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{item.group} • 句子听写 (Sentence Dictation)</span>
               {/* 不在题目前展示句子文本，只有揭示答案后显示 */}
+                {audioSource && (
+                  <div className="mt-1 text-xs text-gray-500">音频来源: {audioSource === 'local' ? '本地文件' : audioSource === 'server-tts' ? '服务器 TTS' : audioSource === 'preloaded' ? '已缓存 (base64)' : audioSource === 'browser-tts' ? '浏览器 TTS (回退)' : '未知'}</div>
+                )}
               {isRevealed && (
                 <h2 className="mt-3 text-xl md:text-2xl font-bold text-gray-800">{item.english}</h2>
               )}

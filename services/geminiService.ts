@@ -9,16 +9,17 @@ const getAudioContext = (): AudioContext | null => {
   return audioCtx;
 };
 
-const getAudioUrlsForItem = (item: StudyItem): string[] => {
+export const getAudioUrlsForItem = (item: StudyItem): string[] => {
   return getAudioFileNameCandidates(item).map(fileName => `/audio/${fileName}`);
 };
 
-const findFirstAvailableAudioUrl = async (item: StudyItem): Promise<string | null> => {
+export const findFirstAvailableAudioUrl = async (item: StudyItem): Promise<string | null> => {
   const urls = getAudioUrlsForItem(item);
   for (const url of urls) {
     try {
-      const response = await fetch(url, { method: 'HEAD' });
-      if (response.ok) return url;
+      // Some static servers may not support HEAD reliably; try a lightweight ranged GET first
+      const response = await fetch(url, { method: 'GET', headers: { Range: 'bytes=0-1' } });
+      if (response.ok || response.status === 206) return url;
     } catch {
       continue;
     }
@@ -36,6 +37,15 @@ const decodeAudioBuffer = async (audioCtx: AudioContext, arrayBuffer: ArrayBuffe
 };
 
 const playAudioUrl = async (url: string) => {
+  // Prefer HTMLAudioElement playback first (more compatible with browsers and simpler)
+  try {
+    const audioEl = new Audio(url);
+    await audioEl.play();
+    return;
+  } catch (err) {
+    // Fallback to AudioContext-based buffered playback
+  }
+
   const ctx = getAudioContext();
   if (!ctx) throw new Error('AudioContext not supported');
   if (ctx.state === 'suspended') {

@@ -14,11 +14,13 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
   const [searchTerm, setSearchTerm] = useState('');
 
   const groups = useMemo(() => {
-    return ['All', ...Array.from(new Set(items.map(i => i.group))).sort()];
+    const unique = Array.from(new Set(items.map(i => i.group))) as string[];
+    unique.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }));
+    return ['All', ...unique];
   }, [items]);
 
   const filteredItems = useMemo(() => {
-    return items.filter(item => {
+    const filtered = items.filter(item => {
       const matchesType = filter === 'all' || item.type === filter;
       const matchesGroup = groupFilter === 'All' || item.group === groupFilter;
       const lowerSearch = searchTerm.toLowerCase();
@@ -26,6 +28,10 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
                             item.chinese.toLowerCase().includes(lowerSearch);
       return matchesType && matchesGroup && matchesSearch;
     });
+
+    // Sort groups in descending (8BU10 before 8BU2)
+    filtered.sort((a, b) => b.group.localeCompare(a.group, undefined, { numeric: true, sensitivity: 'base' }));
+    return filtered;
   }, [items, filter, groupFilter, searchTerm]);
 
   return (
