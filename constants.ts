@@ -4,6 +4,38 @@ export const slugify = (text: string) => {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 };
 
+export const getAudioFileName = (item: StudyItem, sequence: number): string => {
+  const typeLabel = item.type === 'sentence' ? 'Sentence' : item.type === 'phrase' ? 'Phrase' : 'Word';
+  const words = item.english
+    .trim()
+    .split(/\s+/)
+    .slice(0, 3)
+    .map(word => slugify(word.replace(/[^a-zA-Z0-9]/g, '')))
+    .filter(Boolean);
+  const prefix = words.length > 0 ? words.join('-') : slugify(item.english).slice(0, 30);
+  return `${item.group}-${typeLabel}${sequence}-${prefix}.mp3`;
+};
+
+export const getAudioFileNameCandidates = (item: StudyItem): string[] => {
+  const candidates = new Set<string>();
+  if (item.audioFileName) candidates.add(item.audioFileName);
+  candidates.add(`${slugify(item.english)}.mp3`);
+  return Array.from(candidates);
+};
+
+export const assignAudioFileNames = (items: StudyItem[]): StudyItem[] => {
+  const counts: Record<string, number> = {};
+  return items.map(item => {
+    if (item.audioFileName) return item;
+    const key = `${item.group}:${item.type}`;
+    counts[key] = (counts[key] || 0) + 1;
+    return {
+      ...item,
+      audioFileName: getAudioFileName(item, counts[key])
+    };
+  });
+};
+
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export const DEFAULT_STUDY_DATA: StudyItem[] = [

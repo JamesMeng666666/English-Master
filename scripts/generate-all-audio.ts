@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import * as googleTTS from 'google-tts-api';
-import { DEFAULT_STUDY_DATA, slugify } from '../constants';
+import { DEFAULT_STUDY_DATA, assignAudioFileNames, slugify } from '../constants';
 
 const expandTextForAudio = (text: string): string => {
   let expanded = text;
@@ -38,18 +38,19 @@ async function main() {
   const groupArg = process.argv.find(arg => arg.startsWith('--group='));
   const group = groupArg ? groupArg.split('=')[1] : undefined;
   const filteredData = group ? DEFAULT_STUDY_DATA.filter(i => i.group === group) : DEFAULT_STUDY_DATA;
-  const uniquePhrases = Array.from(new Set(filteredData.map(i => i.english)));
+  const itemsWithNames = assignAudioFileNames(filteredData);
+  const uniqueItems = Array.from(new Map(itemsWithNames.map(item => [item.english, item])).values());
 
-  console.log(`Starting generation of ${uniquePhrases.length} audio files${group ? ` for group ${group}` : ''}...`);
+  console.log(`Starting generation of ${uniqueItems.length} audio files${group ? ` for group ${group}` : ''}...`);
 
-  for (let i = 0; i < uniquePhrases.length; i++) {
-    const phrase = uniquePhrases[i];
-    console.log(`Processing ${i + 1}/${uniquePhrases.length}: ${phrase}`);
+  for (let i = 0; i < uniqueItems.length; i++) {
+    const item = uniqueItems[i];
+    console.log(`Processing ${i + 1}/${uniqueItems.length}: ${item.english}`);
     
-    const expanded = expandTextForAudio(phrase);
-    const slug = slugify(phrase);
-    const tempPath = path.join(outDir, `${slug}.temp.mp3`);
-    const filePath = path.join(outDir, `${slug}.mp3`);
+    const expanded = expandTextForAudio(item.english);
+    const fileName = item.audioFileName || `${slugify(item.english)}.mp3`;
+    const tempPath = path.join(outDir, fileName.replace(/\.mp3$/, '.temp.mp3'));
+    const filePath = path.join(outDir, fileName);
 
     // Download to temp file
     await downloadAudio(expanded, tempPath);
@@ -61,7 +62,7 @@ async function main() {
             execSync(`ffmpeg -i "${tempPath}" -ar 44100 -ac 2 -ab 128k -f mp3 -y "${filePath}"`);
             fs.unlinkSync(tempPath);
         } catch (err: any) {
-            console.error(`FFmpeg error for ${slug}:`, err.message);
+            console.error(`FFmpeg error for ${fileName}:`, err.message);
             fs.renameSync(tempPath, filePath); // Fallback to raw download if ffmpeg fails
         }
     }

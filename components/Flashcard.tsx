@@ -4,7 +4,7 @@ import { StudyItem, ReviewGrade } from '../types';
 interface FlashcardProps {
   item: StudyItem;
   onResult: (grade: ReviewGrade) => void;
-  onPlayAudio: (text: string) => void;
+  onPlayAudio: (item: StudyItem | string) => void;
 }
 
 const Flashcard: React.FC<FlashcardProps> = ({ item, onResult, onPlayAudio }) => {
@@ -18,7 +18,7 @@ const Flashcard: React.FC<FlashcardProps> = ({ item, onResult, onPlayAudio }) =>
 
   const handleAudioClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onPlayAudio(item.english);
+    onPlayAudio(item);
   };
 
   return (

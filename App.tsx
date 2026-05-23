@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StudyItem, StudyMode, ReviewGrade } from './types';
-import { DEFAULT_STUDY_DATA, INTERVALS } from './constants';
+import { DEFAULT_STUDY_DATA, INTERVALS, assignAudioFileNames } from './constants';
 import { parseContentWithGemini, playAudio, preloadAudio } from './services/geminiService';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
@@ -25,7 +25,7 @@ function App() {
     const savedKey = localStorage.getItem('gemini_api_key');
 
     if (savedData) {
-      let parsedData = JSON.parse(savedData);
+      let parsedData = assignAudioFileNames(JSON.parse(savedData));
       
       // Auto-merge missing groups from DEFAULT_STUDY_DATA
       const existingGroups = new Set(parsedData.map((item: StudyItem) => item.group));
@@ -40,12 +40,12 @@ function App() {
         }
       });
       
-      setStudyData(parsedData);
+      setStudyData(assignAudioFileNames(parsedData));
       if (hasNewData) {
         localStorage.setItem('ebbinghaus_data', JSON.stringify(parsedData));
       }
     } else {
-      setStudyData(DEFAULT_STUDY_DATA);
+      setStudyData(assignAudioFileNames(DEFAULT_STUDY_DATA));
     }
 
     if (savedKey) setApiKey(savedKey);
@@ -102,7 +102,7 @@ function App() {
   // Preload audio for all items in the session queue to ensure instant playback
   useEffect(() => {
     sessionQueue.forEach(item => {
-      preloadAudio(item.english);
+      preloadAudio(item);
     });
   }, [sessionQueue]);
 
@@ -160,7 +160,7 @@ function App() {
       const groupName = targetGroup.trim() || 'Custom';
       const itemsWithGroup = newItems.map(item => ({ ...item, group: groupName }));
       
-      setStudyData(prev => [...prev, ...itemsWithGroup]);
+      setStudyData(prev => assignAudioFileNames([...prev, ...itemsWithGroup]));
       setRawInput('');
       
       // Auto-switch to the new group if needed so user sees their new items immediately
@@ -178,8 +178,8 @@ function App() {
     }
   };
 
-  const handlePlayAudio = (text: string) => {
-    playAudio(text);
+  const handlePlayAudio = (item: StudyItem | string) => {
+    playAudio(item);
   };
 
   const handleDeleteItem = (id: string) => {

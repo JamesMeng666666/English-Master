@@ -1,5 +1,56 @@
 import { StudyItem } from "../types";
-import { slugify } from "../constants";
+import { slugify, getAudioFileNameCandidates } from "../constants";
+
+const getAudioContext = (): AudioContext | null => {
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+  if (!audioCtx && AudioContextClass) {
+    audioCtx = new AudioContextClass({ sampleRate: 24000 });
+  }
+  return audioCtx;
+};
+
+const getAudioUrlsForItem = (item: StudyItem): string[] => {
+  return getAudioFileNameCandidates(item).map(fileName => `/audio/${fileName}`);
+};
+
+const findFirstAvailableAudioUrl = async (item: StudyItem): Promise<string | null> => {
+  const urls = getAudioUrlsForItem(item);
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      if (response.ok) return url;
+    } catch {
+      continue;
+    }
+  }
+  return null;
+};
+
+const decodeAudioBuffer = async (audioCtx: AudioContext, arrayBuffer: ArrayBuffer): Promise<AudioBuffer> => {
+  return await new Promise<AudioBuffer>((resolve, reject) => {
+    const promise = audioCtx.decodeAudioData(arrayBuffer, resolve, reject);
+    if (promise) {
+      promise.catch(reject);
+    }
+  });
+};
+
+const playAudioUrl = async (url: string) => {
+  const ctx = getAudioContext();
+  if (!ctx) throw new Error('AudioContext not supported');
+  if (ctx.state === 'suspended') {
+    await ctx.resume();
+  }
+
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Audio file missing: ${url}`);
+  const arrayBuffer = await response.arrayBuffer();
+  const audioBuffer = await decodeAudioBuffer(ctx, arrayBuffer);
+  const source = ctx.createBufferSource();
+  source.buffer = audioBuffer;
+  source.connect(ctx.destination);
+  source.start();
+};
 
 export const parseContentWithGemini = async (rawText: string, apiKey: string): Promise<StudyItem[]> => {
   const response = await fetch('/api/generate-cards', {
@@ -31,6 +82,14 @@ export const expandTextForAudio = (text: string): string => {
 
 export const preloadAudio = async (item: StudyItem) => {
   if (item.audioBase64) return;
+
+  try {
+    const localUrl = await findFirstAvailableAudioUrl(item);
+    if (localUrl) return;
+  } catch {
+    // Ignore local file check failures, fall back to TTS preload
+  }
+
   // Pre-fetch missing audio dynamically in background
   try {
     const res = await fetch('/api/tts', {
@@ -110,18 +169,21 @@ const playPcmBase64 = async (base64: string) => {
 };
 
 export const playAudio = async (item: StudyItem | string): Promise<void> => {
-  // Mobile Safari requires AudioContext activation within immediate user interaction.
-  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-  if (!audioCtx && AudioContextClass) {
-    audioCtx = new AudioContextClass({ sampleRate: 24000 });
-  }
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-
   const text = typeof item === 'string' ? item : item.english;
   let base64 = typeof item === 'string' ? undefined : item.audioBase64;
-  
+
+  if (typeof item !== 'string') {
+    try {
+      const localUrl = await findFirstAvailableAudioUrl(item);
+      if (localUrl) {
+        await playAudioUrl(localUrl);
+        return;
+      }
+    } catch (err) {
+      console.warn('Local audio check failed', err);
+    }
+  }
+
   if (!base64) {
     try {
       const res = await fetch('/api/tts', {
@@ -137,7 +199,7 @@ export const playAudio = async (item: StudyItem | string): Promise<void> => {
         }
       }
     } catch (err) {
-      console.warn("Dynamic TTS fetch failed", err);
+      console.warn('Dynamic TTS fetch failed', err);
     }
   }
 
@@ -146,34 +208,19 @@ export const playAudio = async (item: StudyItem | string): Promise<void> => {
       await playPcmBase64(base64);
       return;
     } catch (e) {
-      console.warn("Failed to play PCM", e);
+      console.warn('Failed to play PCM', e);
     }
   }
 
-  // Fallback using decodeAudioData which has better compatibility on iOS than <audio>
-  try {
-    const slug = slugify(text);
-    const audioUrl = `/audio/${slug}.mp3`;
-    
-    const response = await fetch(audioUrl);
-    if (!response.ok) throw new Error("Audio file missing");
-    const arrayBuffer = await response.arrayBuffer();
-    
-    if (audioCtx) {
-      const audioBuffer = await new Promise<AudioBuffer>((resolve, reject) => {
-        const promise = audioCtx!.decodeAudioData(arrayBuffer, resolve, reject);
-        if (promise) {
-          promise.catch(reject);
-        }
-      });
-      const source = audioCtx.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(audioCtx.destination);
-      source.start();
+  if (typeof item !== 'string') {
+    try {
+      const slug = slugify(text);
+      const audioUrl = `/audio/${slug}.mp3`;
+      await playAudioUrl(audioUrl);
       return;
+    } catch (err) {
+      console.warn('Old local audio playback failed', err);
     }
-  } catch (err) {
-    console.warn("Audio play error via AudioContext, falling back to browser TTS", err);
   }
 
   // Fallback to browser TTS if no pre-generated audio or playback fails
@@ -200,8 +247,8 @@ const fallbackToBrowserTTS = (text: string) => {
     // 5. Any 'en-US'
     // 6. Any 'en'
     const preferredVoice = 
+      voices.find(v => v.name.includes('Microsoft')) ||
       voices.find(v => v.name === 'Google US English') ||
-      voices.find(v => v.name.includes('Microsoft Zira')) ||
       voices.find(v => v.name.includes('Samantha')) ||
       voices.find(v => v.lang === 'en-US' && !v.localService) ||
       voices.find(v => v.lang === 'en-US') ||

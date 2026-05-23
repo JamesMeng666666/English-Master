@@ -24,6 +24,7 @@ export interface StudyItem {
   type: 'word' | 'phrase' | 'sentence';
   example?: string;
   audioBase64?: string;
+  audioFileName?: string;
   
   // Ebbinghaus properties
   stage: number; // 0 to 5

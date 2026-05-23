@@ -4,7 +4,7 @@ import { StudyItem } from '../types';
 interface VocabularyListProps {
   items: StudyItem[];
   onBack: () => void;
-  onPlayAudio: (text: string) => void;
+  onPlayAudio: (item: StudyItem | string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -84,7 +84,7 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ items, onBack, onPlayAu
                  <div className="flex flex-wrap items-center gap-2 mb-2">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200 uppercase tracking-wide">{item.group}</span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide border ${item.type === 'sentence' ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>{item.type}</span>
-                    <button onClick={() => onPlayAudio(item.english)} className="text-gray-400 hover:text-primary transition-colors p-1.5 rounded-full hover:bg-gray-50 ml-1" title="Play">
+                    <button onClick={() => onPlayAudio(item)} className="text-gray-400 hover:text-primary transition-colors p-1.5 rounded-full hover:bg-gray-50 ml-1" title="Play">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                     </button>
                  </div>
