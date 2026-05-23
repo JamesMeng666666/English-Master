@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import * as googleTTS from 'google-tts-api';
-import { DEFAULT_STUDY_DATA, assignAudioFileNames, slugify } from '../constants';
+import { loadPackagesData } from '../lib/packages';
+import { assignAudioFileNames, slugify } from '../constants';
 
 const expandTextForAudio = (text: string): string => {
   let expanded = text;
@@ -30,14 +31,9 @@ async function downloadAudio(text: string, filePath: string) {
 }
 
 async function main() {
-  const outDir = path.join(process.cwd(), 'public', 'audio');
-  if (!fs.existsSync(outDir)) {
-    fs.mkdirSync(outDir, { recursive: true });
-  }
-
   const groupArg = process.argv.find(arg => arg.startsWith('--group='));
   const group = groupArg ? groupArg.split('=')[1] : undefined;
-  const filteredData = group ? DEFAULT_STUDY_DATA.filter(i => i.group === group) : DEFAULT_STUDY_DATA;
+  const filteredData = loadPackagesData(group);
   const itemsWithNames = assignAudioFileNames(filteredData);
   const uniqueItems = Array.from(new Map(itemsWithNames.map(item => [item.english, item])).values());
 
@@ -45,8 +41,11 @@ async function main() {
 
   for (let i = 0; i < uniqueItems.length; i++) {
     const item = uniqueItems[i];
+    const outDir = path.join(process.cwd(), 'public', 'packages', item.group, 'audio');
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
     console.log(`Processing ${i + 1}/${uniqueItems.length}: ${item.english}`);
-    
+
     const expanded = expandTextForAudio(item.english);
     const fileName = item.audioFileName || `${slugify(item.english)}.mp3`;
     const tempPath = path.join(outDir, fileName.replace(/\.mp3$/, '.temp.mp3'));

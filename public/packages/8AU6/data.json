@@ -1,0 +1,352 @@
+[
+  {
+    "id": "qk2p4zx7o",
+    "group": "8AU6",
+    "english": "common features",
+    "chinese": "共同特点",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "p39s70raa",
+    "group": "8AU6",
+    "english": "take place",
+    "chinese": "发生",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "yagx22vl0",
+    "group": "8AU6",
+    "english": "at a time",
+    "chinese": "一次",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "45zu4hfzm",
+    "group": "8AU6",
+    "english": "look down at",
+    "chinese": "向下看，俯视",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "62zunzw9v",
+    "group": "8AU6",
+    "english": "sail away",
+    "chinese": "扬帆远去",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "u13q228h3",
+    "group": "8AU6",
+    "english": "take sth. with sb.",
+    "chinese": "某人带上......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "m5wwesnli",
+    "group": "8AU6",
+    "english": "pull sth. into sp.",
+    "chinese": "把......拉到......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "9xdd6vode",
+    "group": "8AU6",
+    "english": "on wheels",
+    "chinese": "带轮子的",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "q5yprscc4",
+    "group": "8AU6",
+    "english": "obey order",
+    "chinese": "服从命令",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "6awxnf8de",
+    "group": "8AU6",
+    "english": "celebrate one’s victory",
+    "chinese": "庆祝某人的胜利",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "fello5ldq",
+    "group": "8AU6",
+    "english": "make jokes about...",
+    "chinese": "开......的玩笑",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "c8pntikv3",
+    "group": "8AU6",
+    "english": "by midnight",
+    "chinese": "到午夜时分时",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "s9ce2j4i5",
+    "group": "8AU6",
+    "english": "except for",
+    "chinese": "除了",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "skj2wbjn8",
+    "group": "8AU6",
+    "english": "make one’s way to",
+    "chinese": "前往......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "302ple9le",
+    "group": "8AU6",
+    "english": "take over",
+    "chinese": "占领",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "akunm953a",
+    "group": "8AU6",
+    "english": "in the end",
+    "chinese": "最后",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "48s96hjri",
+    "group": "8AU6",
+    "english": "succeed in doing sth.",
+    "chinese": "成功做......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vkjlfic5m",
+    "group": "8AU6",
+    "english": "be located in",
+    "chinese": "位于......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zsbze560j",
+    "group": "8AU6",
+    "english": "be tired of",
+    "chinese": "厌烦......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "r3wmom2je",
+    "group": "8AU6",
+    "english": "go on board",
+    "chinese": "上船，登机",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "di1rqup2d",
+    "group": "8AU6",
+    "english": "pretend to do sth.",
+    "chinese": "假装做......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "an5an2man",
+    "group": "8AU6",
+    "english": "be jealous of",
+    "chinese": "嫉妒......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vqvd4imki",
+    "group": "8AU6",
+    "english": "on the other side of",
+    "chinese": "在......另一边",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "y63hc43jp",
+    "group": "8AU6",
+    "english": "under attack",
+    "chinese": "遭受攻击",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "6poe441q0",
+    "group": "8AU6",
+    "english": "be full of/be filled with",
+    "chinese": "充满",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "fwzf2xl4k",
+    "group": "8AU6",
+    "english": "turn...around",
+    "chinese": "掉头",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "gy26rtozv",
+    "group": "8AU6",
+    "english": "be able to do sth.",
+    "chinese": "有能力做某事",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "5k2j31hgo",
+    "group": "8AU6",
+    "english": "order sb. to do sth.",
+    "chinese": "命令某人做某事",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "4amive1yd",
+    "group": "8AU6",
+    "english": "within ten days",
+    "chinese": "十天内",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "6e5l1g6wz",
+    "group": "8AU6",
+    "english": "figure out",
+    "chinese": "弄明白，解决",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "j7ohzu58s",
+    "group": "8AU6",
+    "english": "The Greek army has tried for ten years to capture our city.",
+    "chinese": "希腊军队十年来一直试图占领我们的城市。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "yj58045xl",
+    "group": "8AU6",
+    "english": "Outside the main gate of the city stood a huge wooden horse.",
+    "chinese": "一座巨大的木马矗立在这座城市的主城门之外(倒装句，强调木马所在位置)。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "38d9dsksy",
+    "group": "8AU6",
+    "english": "In the end, they succeeded in capturing it in just one night with a clever trick.",
+    "chinese": "最终，他们用一个巧妙的计谋，仅仅一个晚上就成功拿下了这座城。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "693ie5k7v",
+    "group": "8AU6",
+    "english": "Zhou Yu was jealous of Zhuge Liang and wanted him to fail.",
+    "chinese": "周瑜嫉妒诸葛亮，想让他出丑(想让他失败)。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "f2rf17xlo",
+    "group": "8AU6",
+    "english": "The soldiers shouted and beat their drums loudly.",
+    "chinese": "士兵们大声呼喊，用力击鼓。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  }
+]

@@ -1,0 +1,352 @@
+[
+  {
+    "id": "44rw6s73q",
+    "group": "8AU4",
+    "english": "70% of the Earth (%: percent)",
+    "chinese": "地球的 70%",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "uhzho32ax",
+    "group": "8AU4",
+    "english": "be covered by water",
+    "chinese": "被水所覆盖",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "png7bnmde",
+    "group": "8AU4",
+    "english": "protect the Earth",
+    "chinese": "保护地球",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "tuy2mj04x",
+    "group": "8AU4",
+    "english": "on Earth",
+    "chinese": "在地球上",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "hefri2jzk",
+    "group": "8AU4",
+    "english": "on the land",
+    "chinese": "在陆地上",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "n29xnaudk",
+    "group": "8AU4",
+    "english": "in the sky",
+    "chinese": "在空中",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "czig2uncq",
+    "group": "8AU4",
+    "english": "under the water/under the ground",
+    "chinese": "在水下/在地下",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "s79mvtacf",
+    "group": "8AU4",
+    "english": "people like you and me",
+    "chinese": "如你我之人；芸芸众生",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "4mm3onynl",
+    "group": "8AU4",
+    "english": "provide sb. with sth./ provide sth. for sb.",
+    "chinese": "为某人提供某物",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "z14pues09",
+    "group": "8AU4",
+    "english": "make energy",
+    "chinese": "获取能源，获得能量",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "h0ui546i3",
+    "group": "8AU4",
+    "english": "put …into…",
+    "chinese": "把…倒入；把…放进",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "5ktu368vr",
+    "group": "8AU4",
+    "english": "stop doing sth",
+    "chinese": "停止做某事；别再做某事",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "w45dx7rmf",
+    "group": "8AU4",
+    "english": "It’s important for sb. to do sth.",
+    "chinese": "做某事对某人很重要",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "10a7sgybu",
+    "group": "8AU4",
+    "english": "for our future",
+    "chinese": "为了我们的未来",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "sltcjht33",
+    "group": "8AU4",
+    "english": "set…on fire",
+    "chinese": "烧；把…置于火上",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ehg3y54h8",
+    "group": "8AU4",
+    "english": "keep …safe",
+    "chinese": "保护；使…安全",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "p39ljxwpq",
+    "group": "8AU4",
+    "english": "for example",
+    "chinese": "比如；例如；举例说明",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "517dgqkpe",
+    "group": "8AU4",
+    "english": "one quarter/three quarters",
+    "chinese": "四分之一/四分之三",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "jo0bjchij",
+    "group": "8AU4",
+    "english": "a world map/a map of the world",
+    "chinese": "一幅世界地图",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "tupofp67s",
+    "group": "8AU4",
+    "english": "throw…into…",
+    "chinese": "把…扔进",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "6b5lxhiez",
+    "group": "8AU4",
+    "english": "throw away",
+    "chinese": "扔掉",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "r032rosnu",
+    "group": "8AU4",
+    "english": "take a photo",
+    "chinese": "拍一张照片",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "1ktk1dbmh",
+    "group": "8AU4",
+    "english": "on the beach",
+    "chinese": "在沙滩上",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "a6uinjr4w",
+    "group": "8AU4",
+    "english": "take a look at…/have a look at…=look at…",
+    "chinese": "看一看…; 看一下…",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "xa07cppmf",
+    "group": "8AU4",
+    "english": "ask sb. for sth.",
+    "chinese": "向…要…",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "c2s7q2ilc",
+    "group": "8AU4",
+    "english": "turn into",
+    "chinese": "变成",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ypunt0i3g",
+    "group": "8AU4",
+    "english": "blow away",
+    "chinese": "吹走",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zb1qzvnn8",
+    "group": "8AU4",
+    "english": "keep…alive",
+    "chinese": "存活；使…活着",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "90wwlhllh",
+    "group": "8AU4",
+    "english": "a long time ago",
+    "chinese": "很久以前",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "be4dvb4wh",
+    "group": "8AU4",
+    "english": "in the end",
+    "chinese": "最终；终于",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "pu80gnwvr",
+    "group": "8AU4",
+    "english": "The Earth provides us with all the things we need, such as food, water, air and energy.",
+    "chinese": "地球为我们提供了所有我们需要的东西，比如食物，水 空气和能量。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "cce64dc5p",
+    "group": "8AU4",
+    "english": "The Earth is home to millions of animals.",
+    "chinese": "地球是数百万动物的家园。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "0o6jxcevp",
+    "group": "8AU4",
+    "english": "Three generations of forest workers continued the hard work.",
+    "chinese": "三代护林人持续着这项艰辛的工作。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "i76zha7yc",
+    "group": "8AU4",
+    "english": "We must stop doing these things.",
+    "chinese": "我们必须停止做这些事。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ljd1zph6c",
+    "group": "8AU4",
+    "english": "It is important for us to protect the Earth for our future.",
+    "chinese": "为了我们的未来，保护地球对我们很重要。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  }
+]

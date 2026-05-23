@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import * as googleTTS from 'google-tts-api';
-import { DEFAULT_STUDY_DATA, assignAudioFileNames, slugify, getAudioFileNameCandidates } from '../constants';
+import { loadPackagesData } from '../lib/packages';
+import { assignAudioFileNames, slugify, getAudioFileNameCandidates } from '../constants';
 
 const expandTextForAudio = (text: string): string => {
   let expanded = text;
@@ -31,18 +32,24 @@ async function downloadAudio(text: string, filePath: string) {
 }
 
 async function main() {
-  const outDir = path.join(process.cwd(), 'public', 'audio');
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-
-  const items = assignAudioFileNames(DEFAULT_STUDY_DATA);
+  const items = assignAudioFileNames(loadPackagesData());
   const unique = Array.from(new Map(items.map(i => [i.english, i])).values());
 
   const missing: { item: typeof unique[number]; expected: string }[] = [];
 
-  const files = fs.readdirSync(outDir).map(f => f.toLowerCase());
+  // Pre-load file lists per group for efficient lookup
+  const groupFiles: Record<string, string[]> = {};
+  const getFilesForGroup = (group: string): string[] => {
+    if (!groupFiles[group]) {
+      const dir = path.join(process.cwd(), 'public', 'packages', group, 'audio');
+      groupFiles[group] = fs.existsSync(dir) ? fs.readdirSync(dir).map(f => f.toLowerCase()) : [];
+    }
+    return groupFiles[group];
+  };
 
   for (const item of unique) {
     const expected = item.audioFileName || `${slugify(item.english)}.mp3`;
+    const files = getFilesForGroup(item.group);
     const candidates = getAudioFileNameCandidates(item).map(c => c.toLowerCase());
     const exists = candidates.some(c => files.includes(c)) || files.some(f => f.includes(slugify(item.english).slice(0, 12)) && f.endsWith('.mp3'));
     if (!exists) {
@@ -59,6 +66,9 @@ async function main() {
 
   for (let i = 0; i < missing.length; i++) {
     const { item, expected } = missing[i];
+    const outDir = path.join(process.cwd(), 'public', 'packages', item.group, 'audio');
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
     console.log(`[${i + 1}/${missing.length}] Generating:`, expected, '->', item.english);
     const expanded = expandTextForAudio(item.english);
     const tempPath = path.join(outDir, expected.replace(/\.mp3$/, '.temp.mp3'));

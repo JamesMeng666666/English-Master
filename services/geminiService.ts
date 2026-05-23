@@ -10,7 +10,12 @@ const getAudioContext = (): AudioContext | null => {
 };
 
 export const getAudioUrlsForItem = (item: StudyItem): string[] => {
-  return getAudioFileNameCandidates(item).map(fileName => `/audio/${fileName}`);
+  const candidates = getAudioFileNameCandidates(item);
+  const urls: string[] = [];
+  for (const fileName of candidates) {
+    urls.push(`/packages/${item.group}/audio/${fileName}`);
+  }
+  return urls;
 };
 
 export const findFirstAvailableAudioUrl = async (item: StudyItem): Promise<string | null> => {
@@ -225,7 +230,7 @@ export const playAudio = async (item: StudyItem | string): Promise<void> => {
   if (typeof item !== 'string') {
     try {
       const slug = slugify(text);
-      const audioUrl = `/audio/${slug}.mp3`;
+      const audioUrl = `/packages/${item.group}/audio/${slug}.mp3`;
       await playAudioUrl(audioUrl);
       return;
     } catch (err) {

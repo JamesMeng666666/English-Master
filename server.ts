@@ -1,7 +1,10 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
+import archiver from "archiver";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type, Modality } from "@google/genai";
+import { loadPackagesData, getPackageNames } from "./lib/packages";
 
 const expandTextForAudio = (text: string): string => {
   let expanded = text;
@@ -133,6 +136,77 @@ async function startServer() {
     } catch (e: any) {
       console.error("TTS error:", e);
       res.status(500).json({ error: e.message || "Failed to generate TTS" });
+    }
+  });
+
+  app.get("/api/packages", (req, res) => {
+    try {
+      res.json(getPackageNames());
+    } catch (e: any) {
+      console.error(e);
+      res.status(500).json({ error: "Failed to read packages" });
+    }
+  });
+
+  app.get("/api/packages-data", (req, res) => {
+    try {
+      res.json(loadPackagesData());
+    } catch (e: any) {
+      console.error(e);
+      res.status(500).json({ error: "Failed to read packages data" });
+    }
+  });
+
+  app.post("/api/export-package", async (req, res) => {
+    try {
+      const { groupName, items } = req.body;
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) return res.status(400).json({ error: "No API Key" });
+      if (!groupName || !items || !Array.isArray(items)) return res.status(400).json({ error: "Invalid data" });
+
+      const ai = new GoogleGenAI({ apiKey, httpOptions: { headers: { 'User-Agent': 'aistudio-build' } } });
+      
+      const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const typeLabel = item.type === 'sentence' ? 'Sentence' : item.type === 'phrase' ? 'Phrase' : 'Word';
+        const words = item.english.trim().split(/\s+/).slice(0, 3).map((word: string) => slugify(word.replace(/[^a-zA-Z0-9]/g, ''))).filter(Boolean);
+        const prefix = words.length > 0 ? words.join('-') : slugify(item.english).slice(0, 30);
+        item.audioFileName = `${groupName}-${typeLabel}${i+1}-${prefix}.mp3`;
+      }
+
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="${groupName}_package.zip"`);
+      
+      const archive = archiver('zip', { zlib: { level: 9 } });
+      archive.on('error', (err) => { throw err; });
+      archive.pipe(res);
+
+      archive.append(JSON.stringify(items, null, 2), { name: `${groupName}/data.json` });
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const expandedText = expandTextForAudio(item.english);
+        const ttsResponse = await ai.models.generateContent({
+          model: "gemini-3.1-flash-tts-preview",
+          contents: [{ parts: [{ text: `Say clearly: ${expandedText}` }] }],
+          config: {
+            responseModalities: [Modality.AUDIO],
+            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } },
+          },
+        });
+        const base64Audio = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        if (base64Audio) {
+          const buffer = Buffer.from(base64Audio, 'base64');
+          archive.append(buffer, { name: `${groupName}/audio/${item.audioFileName}` });
+        }
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+      
+      archive.finalize();
+    } catch (e: any) {
+      console.error(e);
+      if (!res.headersSent) res.status(500).json({ error: e.message || "Failed" });
     }
   });
 

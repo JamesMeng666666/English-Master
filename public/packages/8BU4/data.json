@@ -1,0 +1,352 @@
+[
+  {
+    "id": "9mn3lnacv",
+    "group": "8BU4",
+    "english": "appreciate / promote traditional arts",
+    "chinese": "欣赏/弘扬传统艺术",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "c0alce0pw",
+    "group": "8BU4",
+    "english": "a legendary Chinese painting",
+    "chinese": "一幅中国传奇画作",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ew9hysptj",
+    "group": "8BU4",
+    "english": "hear about",
+    "chinese": "听说",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "dx080bduw",
+    "group": "8BU4",
+    "english": "a world-famous landscape painting",
+    "chinese": "一幅世界闻名的山水画",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "2uwrg8if9",
+    "group": "8BU4",
+    "english": "work on a painting",
+    "chinese": "创作一幅画",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "s0hv33sv4",
+    "group": "8BU4",
+    "english": "in one sitting",
+    "chinese": "一气呵成",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "f83hx2dpk",
+    "group": "8BU4",
+    "english": "be in the mood",
+    "chinese": "有兴致；心情好",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "uqhcgqi48",
+    "group": "8BU4",
+    "english": "take sb. on a breathtaking journey",
+    "chinese": "带某人踏上一段令人惊叹的旅程",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vn7wwckhz",
+    "group": "8BU4",
+    "english": "be at one with nature",
+    "chinese": "与自然融为一体",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "sfdda2m84",
+    "group": "8BU4",
+    "english": "be copied by",
+    "chinese": "被......临摹",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "gri5txrn2",
+    "group": "8BU4",
+    "english": "be split into two pieces",
+    "chinese": "被分成两半",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "rrzl07dpe",
+    "group": "8BU4",
+    "english": "go one’s separate ways",
+    "chinese": "分道扬镳；经历不同命运",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "q8bmr0fic",
+    "group": "8BU4",
+    "english": "experience dramatic events",
+    "chinese": "经历跌宕起伏的事件",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "tr32kjlif",
+    "group": "8BU4",
+    "english": "inspire sb. to do sth.",
+    "chinese": "激励某人做......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "jw27v6f13",
+    "group": "8BU4",
+    "english": "be adopted by",
+    "chinese": "被......收养",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "fuk4mzpx0",
+    "group": "8BU4",
+    "english": "be known as",
+    "chinese": "被称为",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "3cyt7c4g8",
+    "group": "8BU4",
+    "english": "pass away",
+    "chinese": "去世",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "l6hlxvgu8",
+    "group": "8BU4",
+    "english": "sth. be put on display",
+    "chinese": "......被展出",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "801d6f0pr",
+    "group": "8BU4",
+    "english": "to one’s surprise",
+    "chinese": "令某人惊讶的是",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "p9hq95lmm",
+    "group": "8BU4",
+    "english": "people from all walks of life",
+    "chinese": "各行各业的人",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "e2t9eqyju",
+    "group": "8BU4",
+    "english": "priceless wall paintings and sculptures",
+    "chinese": "珍贵的壁画与雕塑",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "wq2lvd2a4",
+    "group": "8BU4",
+    "english": "graduate from",
+    "chinese": "毕业于",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "gnzb05k52",
+    "group": "8BU4",
+    "english": "compare...with...",
+    "chinese": "把......与......比较",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "coy738u2r",
+    "group": "8BU4",
+    "english": "make a shocking discovery",
+    "chinese": "有了一个令人震惊的发现",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "3ip78qzup",
+    "group": "8BU4",
+    "english": "make up one’s mind (to do sth.)",
+    "chinese": "下定决心(做......)",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "g4emmvi4d",
+    "group": "8BU4",
+    "english": "slow down",
+    "chinese": "放缓，减慢",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "w02o4j7lk",
+    "group": "8BU4",
+    "english": "in this harsh natural environment",
+    "chinese": "在这种恶劣的自然环境中",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "qomb77kuh",
+    "group": "8BU4",
+    "english": "dedicate one’s life to (doing) sth,",
+    "chinese": "一生致力于(做)......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "gyyuas4hx",
+    "group": "8BU4",
+    "english": "preserve cultural heritage",
+    "chinese": "保护文化遗产",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "5fa9mr4yy",
+    "group": "8BU4",
+    "english": "work tirelessly to do sth.",
+    "chinese": "孜孜不倦地做......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "i93bgqzqg",
+    "group": "8BU4",
+    "english": "He first made a rough drawing of the whole painting in one sitting.",
+    "chinese": "他先是一气呵成画出了整幅画的草图。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ogcln2rx8",
+    "group": "8BU4",
+    "english": "The final painting was almost seven metres long and it was given to a friend as a present.",
+    "chinese": "最终完成的画作近七米长，他把它送给了一位朋友作为礼物。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "2b82hxr68",
+    "group": "8BU4",
+    "english": "Dwelling in the Fuchun Mountains was such an amazing painting that it was copied by hundreds of artists.",
+    "chinese": "《富春山居图》是如此出色的一幅画，以至于被数百位艺术家临摹。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "0c88faw15",
+    "group": "8BU4",
+    "english": "Now, people all over the world can explore the unique art of the Mogao Caves without leaving their homes.",
+    "chinese": "如今，世界各地的人们足不出户就能探索莫高窟的独特艺术。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "9jo50m29a",
+    "group": "8BU4",
+    "english": "The longer I've stayed here, the deeper my love has grown for Dunhuang.",
+    "chinese": "我在这里待得越久，对敦煌的爱就越深。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  }
+]

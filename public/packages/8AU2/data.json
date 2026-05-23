@@ -1,0 +1,352 @@
+[
+  {
+    "id": "4yisrtrw9",
+    "group": "8AU2",
+    "english": "flight schedule",
+    "chinese": "航班时刻表",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "k1wars8jp",
+    "group": "8AU2",
+    "english": "a wise man",
+    "chinese": "一位智者",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "8etzkrkb0",
+    "group": "8AU2",
+    "english": "challenge sb. to sth.",
+    "chinese": "挑战某人做某事",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "y2zxskr7l",
+    "group": "8AU2",
+    "english": "think for a moment",
+    "chinese": "思考了一会儿",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ixzec3qvi",
+    "group": "8AU2",
+    "english": "one grain of rice",
+    "chinese": "一粒米",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "693boyaad",
+    "group": "8AU2",
+    "english": "the square of the chessboard",
+    "chinese": "棋盘的格",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "7hlw0nrpl",
+    "group": "8AU2",
+    "english": "double the amount",
+    "chinese": "数量翻倍",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "y83cro7aj",
+    "group": "8AU2",
+    "english": "the rest of",
+    "chinese": "......的剩余部分",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "c59a2c7no",
+    "group": "8AU2",
+    "english": "without hesitation",
+    "chinese": "毫不犹豫",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "373zsucuu",
+    "group": "8AU2",
+    "english": "order sb. to do sth.",
+    "chinese": "命令某人做某事",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "e7nbpx2dt",
+    "group": "8AU2",
+    "english": "and so on",
+    "chinese": "等等",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "mlsepbtw9",
+    "group": "8AU2",
+    "english": "realize the problem",
+    "chinese": "意识到问题",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "58ezdzudv",
+    "group": "8AU2",
+    "english": "promise to do",
+    "chinese": "承诺做......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "og6173wzy",
+    "group": "8AU2",
+    "english": "ask sb. for advice",
+    "chinese": "向某人寻求建议",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "7xn6gzb3h",
+    "group": "8AU2",
+    "english": "take/follow one’s advice",
+    "chinese": "采纳某人的建议",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "6785n3lnb",
+    "group": "8AU2",
+    "english": "make a profit/budget",
+    "chinese": "获利/做预算",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vxep46exx",
+    "group": "8AU2",
+    "english": "in time",
+    "chinese": "及时；不久；将来",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "yak78nsm6",
+    "group": "8AU2",
+    "english": "record and present information",
+    "chinese": "记录并呈现信息",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "1bz257pz1",
+    "group": "8AU2",
+    "english": "take...for example",
+    "chinese": "以...为例",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "hruekz7y0",
+    "group": "8AU2",
+    "english": "be based on",
+    "chinese": "基于",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "b8q91r0t2",
+    "group": "8AU2",
+    "english": "a line graph",
+    "chinese": "折线图",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "1ji76hu9n",
+    "group": "8AU2",
+    "english": "rise/fall sharply",
+    "chinese": "急剧上升/下降",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "q5f83ohbu",
+    "group": "8AU2",
+    "english": "go up/down",
+    "chinese": "上升/下降",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "l4i3h6ry2",
+    "group": "8AU2",
+    "english": "stay/remain the same",
+    "chinese": "保持不变",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ysyeum9u0",
+    "group": "8AU2",
+    "english": "replace A with B",
+    "chinese": "用 B 替换 A",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "4so3g4zdm",
+    "group": "8AU2",
+    "english": "stand for",
+    "chinese": "代表",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "si9hqrsop",
+    "group": "8AU2",
+    "english": "write down",
+    "chinese": "写下",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "w3amc57yq",
+    "group": "8AU2",
+    "english": "instead of (doing) sth.",
+    "chinese": "代替，而不是",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "inu46bito",
+    "group": "8AU2",
+    "english": "spread to",
+    "chinese": "传播到",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "1hxbarjhf",
+    "group": "8AU2",
+    "english": "be known as",
+    "chinese": "被称为......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "um1ugk4rq",
+    "group": "8AU2",
+    "english": "One day, a wise old man came to the palace and the king challenged him to a game.",
+    "chinese": "一天，一位充满智慧的长者来到王宫，国王向他发起了挑战。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "3o7eelrs3",
+    "group": "8AU2",
+    "english": "I’d like you to double the amount for each of the rest of the squares.",
+    "chinese": "我想要你在剩余的每个格里依次增加一倍大米的数量。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "x2s20zwab",
+    "group": "8AU2",
+    "english": "The graph shows that Shenzhen experienced great population changes from 1979 to 2024.",
+    "chinese": "这张图表表明深圳在 1979 到 2024 年间经历了巨大的人口变化。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zww6vd7v3",
+    "group": "8AU2",
+    "english": "In ancient times, people developed different counting methods.",
+    "chinese": "在古代，人们发展出了不同的计数方法。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "gliuw73y2",
+    "group": "8AU2",
+    "english": "The Roman numerals used to be the most common way of writing numbers in Europe.",
+    "chinese": "罗马数字曾经是欧洲最常用的数字书写方式。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  }
+]

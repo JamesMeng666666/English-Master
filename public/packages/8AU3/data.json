@@ -1,0 +1,352 @@
+[
+  {
+    "id": "su1xlterx",
+    "group": "8AU3",
+    "english": "special features",
+    "chinese": "特色；特点；特征",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "10a2z89aw",
+    "group": "8AU3",
+    "english": "wake up",
+    "chinese": "醒；醒来",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "gixn6kg6f",
+    "group": "8AU3",
+    "english": "come back from",
+    "chinese": "从……回来",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "iievi4fax",
+    "group": "8AU3",
+    "english": "start/begin to do sth./start doing sth.",
+    "chinese": "开始做某事",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "oqotezaph",
+    "group": "8AU3",
+    "english": "work one’s land",
+    "chinese": "耕种土地",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "jjbssyksb",
+    "group": "8AU3",
+    "english": "It is exciting to do sth.",
+    "chinese": "做某事令人兴奋",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "oe6d5uoy7",
+    "group": "8AU3",
+    "english": "take a trip in the countryside",
+    "chinese": "去乡村旅行",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "db94u063w",
+    "group": "8AU3",
+    "english": "in the clear, blue sky",
+    "chinese": "在晴朗、湛蓝的天空中",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "nbxkmccvw",
+    "group": "8AU3",
+    "english": "be full of ...",
+    "chinese": "充满……",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "8f5nhevhn",
+    "group": "8AU3",
+    "english": "gather food for the cold winter",
+    "chinese": "为寒冷的冬天收集食物",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "0809tv6n8",
+    "group": "8AU3",
+    "english": "be busy with",
+    "chinese": "忙于",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "4kifw4smg",
+    "group": "8AU3",
+    "english": "go on a family outing",
+    "chinese": "全家一起远足",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "yf420ggck",
+    "group": "8AU3",
+    "english": "at this time of year",
+    "chinese": "在一年中的这个时候",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "akjiz2qq5",
+    "group": "8AU3",
+    "english": "through the winter",
+    "chinese": "整个冬天",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "k5yt7d0b2",
+    "group": "8AU3",
+    "english": "play in the snow",
+    "chinese": "在雪地里玩耍",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "w9fix85r2",
+    "group": "8AU3",
+    "english": "the 24 solar terms",
+    "chinese": "二十四节气",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "8zn95duja",
+    "group": "8AU3",
+    "english": "the traditional Chinese calendar",
+    "chinese": "农历",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "b08ubib1k",
+    "group": "8AU3",
+    "english": "in fact",
+    "chinese": "事实上",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "6rfxhxnpv",
+    "group": "8AU3",
+    "english": "be divided into",
+    "chinese": "被划分成……",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "h5nvgj2o1",
+    "group": "8AU3",
+    "english": "be based on",
+    "chinese": "基于……",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "2y4o08uhk",
+    "group": "8AU3",
+    "english": "start with",
+    "chinese": "以……开始",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "5ntg6jowi",
+    "group": "8AU3",
+    "english": "Start of Spring",
+    "chinese": "立春",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "9wu83jmgf",
+    "group": "8AU3",
+    "english": "fall on",
+    "chinese": "发生",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zgio8k5ht",
+    "group": "8AU3",
+    "english": "in daily life",
+    "chinese": "在日常生活中",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "8nb4jz4s3",
+    "group": "8AU3",
+    "english": "for example / such as",
+    "chinese": "例如",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "l3s5nvosu",
+    "group": "8AU3",
+    "english": "plant crops",
+    "chinese": "种植庄稼",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "5wels4ssq",
+    "group": "8AU3",
+    "english": "play an important part in",
+    "chinese": "在……上发挥重要作用",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "pqgr8x6bg",
+    "group": "8AU3",
+    "english": "traditional Chinese culture",
+    "chinese": "中国传统文化",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vfupigksx",
+    "group": "8AU3",
+    "english": "spring rolls",
+    "chinese": "春卷",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "17tgq4pft",
+    "group": "8AU3",
+    "english": "spring pancakes",
+    "chinese": "春饼",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zmi0asy6o",
+    "group": "8AU3",
+    "english": "In autumn, leaves turn brown, red or yellow and start falling down from the trees.",
+    "chinese": "秋天叶子变成了棕色、红色、黄色，开始从树上飘落下来。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ukacyfytn",
+    "group": "8AU3",
+    "english": "It is exciting to take a trip in the countryside in springtime.",
+    "chinese": "在春天，去乡村旅行是令人兴奋的。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "9f3mjxhwk",
+    "group": "8AU3",
+    "english": "In fact, the year is divided into 24 parts, based on where the sun is in the sky.",
+    "chinese": "实际上，一年被分为 24 个部分，是根据太阳在天空中的位置来划分的。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "sz0394ajf",
+    "group": "8AU3",
+    "english": "Each of the seasons is then divided into six parts, and each part lasts about 15 days.",
+    "chinese": "每个季节又被分为六个部分，每个部分持续约 15 天。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "aiizuxx0i",
+    "group": "8AU3",
+    "english": "People celebrated these days in different ways such as eating special local dishes.",
+    "chinese": "人们以不同的方式庆祝这些日子，比如吃当地的特色菜肴。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  }
+]

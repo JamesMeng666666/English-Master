@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StudyItem, StudyMode, ReviewGrade } from './types';
-import { DEFAULT_STUDY_DATA, INTERVALS, assignAudioFileNames } from './constants';
+import { INTERVALS, assignAudioFileNames } from './constants';
 import { parseContentWithGemini, playAudio, preloadAudio } from './services/geminiService';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
@@ -21,34 +21,47 @@ function App() {
 
   // Initialize Data
   useEffect(() => {
-    const savedData = localStorage.getItem('ebbinghaus_data');
-    const savedKey = localStorage.getItem('gemini_api_key');
+    const init = async () => {
+      const savedData = localStorage.getItem('ebbinghaus_data');
+      const savedKey = localStorage.getItem('gemini_api_key');
 
-    if (savedData) {
-      let parsedData = assignAudioFileNames(JSON.parse(savedData));
-      
-      // Auto-merge missing groups from DEFAULT_STUDY_DATA
-      const existingGroups = new Set(parsedData.map((item: StudyItem) => item.group));
-      const defaultGroups = new Set(DEFAULT_STUDY_DATA.map(item => item.group));
-      
-      let hasNewData = false;
-      defaultGroups.forEach(group => {
-        if (!existingGroups.has(group)) {
-          const itemsToAdd = DEFAULT_STUDY_DATA.filter(item => item.group === group);
-          parsedData = [...parsedData, ...itemsToAdd];
-          hasNewData = true;
+      let defaultData: StudyItem[] = [];
+      try {
+        const res = await fetch('/api/packages-data');
+        if (res.ok) {
+          defaultData = await res.json();
         }
-      });
-      
-      setStudyData(assignAudioFileNames(parsedData));
-      if (hasNewData) {
-        localStorage.setItem('ebbinghaus_data', JSON.stringify(parsedData));
+      } catch (e) {
+        console.error('Failed to load package data:', e);
       }
-    } else {
-      setStudyData(assignAudioFileNames(DEFAULT_STUDY_DATA));
-    }
 
-    if (savedKey) setApiKey(savedKey);
+      if (savedData) {
+        let parsedData = assignAudioFileNames(JSON.parse(savedData));
+
+        // Auto-merge missing groups from default data
+        const existingGroups = new Set(parsedData.map((item: StudyItem) => item.group));
+        const defaultGroups = new Set(defaultData.map(item => item.group));
+
+        let hasNewData = false;
+        defaultGroups.forEach(group => {
+          if (!existingGroups.has(group)) {
+            const itemsToAdd = defaultData.filter(item => item.group === group);
+            parsedData = [...parsedData, ...itemsToAdd];
+            hasNewData = true;
+          }
+        });
+
+        setStudyData(assignAudioFileNames(parsedData));
+        if (hasNewData) {
+          localStorage.setItem('ebbinghaus_data', JSON.stringify(parsedData));
+        }
+      } else {
+        setStudyData(assignAudioFileNames(defaultData));
+      }
+
+      if (savedKey) setApiKey(savedKey);
+    };
+    init();
   }, []);
 
   // Save Data on Change
@@ -188,13 +201,20 @@ function App() {
     }
   };
   
-  const handleResetToDefault = () => {
-      if(window.confirm("Reload standard textbook content (8AU1, 8AU2, 8AU3, 8AU4, 8AU5, 8AU6, 8AU7, 8AU8, 8BU1, 8BU2)? Current custom content will be kept if you append.")) {
-          // Find IDs from default to avoid duplicates or just replace
+  const handleResetToDefault = async () => {
+      if(window.confirm("Reload standard textbook content from packages? Current custom content will be kept if you append.")) {
+          let defaultData: StudyItem[] = [];
+          try {
+            const res = await fetch('/api/packages-data');
+            if (res.ok) defaultData = await res.json();
+          } catch (e) {
+            console.error('Failed to load package data:', e);
+            return;
+          }
           if (window.confirm("Replace everything or append? Cancel to Replace, OK to Append.")) {
-              setStudyData(prev => [...prev, ...DEFAULT_STUDY_DATA]);
+              setStudyData(prev => [...prev, ...defaultData]);
           } else {
-              setStudyData(DEFAULT_STUDY_DATA);
+              setStudyData(assignAudioFileNames(defaultData));
           }
       }
   }

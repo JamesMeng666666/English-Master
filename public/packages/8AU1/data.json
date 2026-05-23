@@ -1,0 +1,352 @@
+[
+  {
+    "id": "01eztv3v2",
+    "group": "8AU1",
+    "english": "look up",
+    "chinese": "查询，查找",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "g4nr9fvq4",
+    "group": "8AU1",
+    "english": "an encyclopedia entry",
+    "chinese": "一个百科全书条目",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "955rs7ilc",
+    "group": "8AU1",
+    "english": "look through",
+    "chinese": "浏览",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "whpj5vrbv",
+    "group": "8AU1",
+    "english": "die out / down",
+    "chinese": "灭绝；减弱",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "7rh2ffl06",
+    "group": "8AU1",
+    "english": "be ... talented in / show ... talent",
+    "chinese": "在...方面有...天赋/ 展现...才华",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zvjsbxs0m",
+    "group": "8AU1",
+    "english": "be born in",
+    "chinese": "在...出生",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "hokdff4t4",
+    "group": "8AU1",
+    "english": "from an early age",
+    "chinese": "从很小的时候",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "dykolqq7z",
+    "group": "8AU1",
+    "english": "as sb. grew older",
+    "chinese": "随着某人年龄的增长",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "qsefm8goh",
+    "group": "8AU1",
+    "english": "a type/kind of",
+    "chinese": "一种",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vffu9co7p",
+    "group": "8AU1",
+    "english": "be related to",
+    "chinese": "与...属于同一种类",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "dfvur97hj",
+    "group": "8AU1",
+    "english": "come from",
+    "chinese": "来自",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ii1brmy7z",
+    "group": "8AU1",
+    "english": "either...or / neither...nor",
+    "chinese": "不是...就是/既不...也不",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "euyib0o1j",
+    "group": "8AU1",
+    "english": "as + adj./adv. + as...",
+    "chinese": "像...一样...",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "qeig96rj5",
+    "group": "8AU1",
+    "english": "more than / less than",
+    "chinese": "超过/少于",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "xa5p8bjxq",
+    "group": "8AU1",
+    "english": "be (not) sure",
+    "chinese": "确信/不确信",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "2fo57egf1",
+    "group": "8AU1",
+    "english": "connection between A and B",
+    "chinese": "A 与 B 之间的联系",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "1llrzu33x",
+    "group": "8AU1",
+    "english": "in one way",
+    "chinese": "在某种程度上",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "1qewneb9q",
+    "group": "8AU1",
+    "english": "national anthem",
+    "chinese": "国歌",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "i41373siy",
+    "group": "8AU1",
+    "english": "original name / nickname",
+    "chinese": "原名/ 绰号，昵称",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vjug6l8r0",
+    "group": "8AU1",
+    "english": "a dinosaur expert",
+    "chinese": "一位恐龙专家",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "3lwfdh55z",
+    "group": "8AU1",
+    "english": "agree/disagree about",
+    "chinese": "对...意见统一/意见不统一",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "xse91q5q2",
+    "group": "8AU1",
+    "english": "the development of modern art",
+    "chinese": "现代艺术发展",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "3cbk9x0v5",
+    "group": "8AU1",
+    "english": "basic information",
+    "chinese": "基本信息",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "7ep80bh75",
+    "group": "8AU1",
+    "english": "main achievements",
+    "chinese": "主要成就",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "dryheog5t",
+    "group": "8AU1",
+    "english": "awards and titles",
+    "chinese": "奖项和头衔",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "v6t157l60",
+    "group": "8AU1",
+    "english": "all kinds of",
+    "chinese": "各种各样的",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "f9hbjzkxb",
+    "group": "8AU1",
+    "english": "general education",
+    "chinese": "通识教育",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "338mj3wdv",
+    "group": "8AU1",
+    "english": "be written by",
+    "chinese": "作者是",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "2wajc069d",
+    "group": "8AU1",
+    "english": "be similar to",
+    "chinese": "与...相似",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "9vghu7gk8",
+    "group": "8AU1",
+    "english": "play an important role in",
+    "chinese": "在…中起重要作用",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "aw9x83zoq",
+    "group": "8AU1",
+    "english": "Da Vinci was extremely intelligent, and he was unusually talented in many different fields.",
+    "chinese": "达芬奇非常聪明，他在许多不同的领域都有非凡的才能。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "s2cu869fe",
+    "group": "8AU1",
+    "english": "As he grew older, he learnt to do many different things.",
+    "chinese": "随着年龄的增长，他学会了做许多不同的事情。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "xx4h1r7nt",
+    "group": "8AU1",
+    "english": "Dinosaurs lived on land and walked on either two or four legs.",
+    "chinese": "恐龙生活在陆地上，用两条腿或四条腿走路。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ccx5fgjwu",
+    "group": "8AU1",
+    "english": "Yuan’s work has helped feed people in China and many other parts of the world.",
+    "chinese": "袁隆平的工作帮助养活了中国和世界许多地方的人们。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ep9n7ggp9",
+    "group": "8AU1",
+    "english": "Encyclopaedias have played an important role through history in recording and providing information.",
+    "chinese": "百科全书在历史中起到了重要作用，记录和提供信息。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098350,
+    "easeFactor": 2.5
+  }
+]

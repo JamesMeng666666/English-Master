@@ -1,0 +1,352 @@
+[
+  {
+    "id": "4t6r2ayca",
+    "group": "8BU3",
+    "english": "shadow puppet",
+    "chinese": "皮影",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "yobneysfl",
+    "group": "8BU3",
+    "english": "ink-wash painting",
+    "chinese": "水墨画",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "nsrmuy70u",
+    "group": "8BU3",
+    "english": "combine … with …",
+    "chinese": "将......与......结合",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "r3klcfy6u",
+    "group": "8BU3",
+    "english": "come to life",
+    "chinese": "显得逼真",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "3nvbg4zds",
+    "group": "8BU3",
+    "english": "have an influence on",
+    "chinese": "对......有影响",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "pvtaxp6hb",
+    "group": "8BU3",
+    "english": "sound effects",
+    "chinese": "音效",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "bfc3g97ti",
+    "group": "8BU3",
+    "english": "with the help of …",
+    "chinese": "在......的帮助下",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "4rjrpqpva",
+    "group": "8BU3",
+    "english": "adapt … into …",
+    "chinese": "把......改编为......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "tx0u1kh7j",
+    "group": "8BU3",
+    "english": "be similar to",
+    "chinese": "与......相似",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zyy9h4xef",
+    "group": "8BU3",
+    "english": "spring up",
+    "chinese": "涌现",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "4ieu0ei0a",
+    "group": "8BU3",
+    "english": "in very eye-catching ways",
+    "chinese": "以非常引人注目的方式",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "ljc06ke43",
+    "group": "8BU3",
+    "english": "artificial intelligence",
+    "chinese": "人工智能",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "7vqu9cv8l",
+    "group": "8BU3",
+    "english": "weather forecast",
+    "chinese": "天气预报",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "4odvu1fmr",
+    "group": "8BU3",
+    "english": "life jacket",
+    "chinese": "救生衣",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "y0s931fnv",
+    "group": "8BU3",
+    "english": "comic strip",
+    "chinese": "连环漫画",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "zps03d2ek",
+    "group": "8BU3",
+    "english": "put on",
+    "chinese": "上演；演出",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "pv1uhobte",
+    "group": "8BU3",
+    "english": "date back",
+    "chinese": "追溯到；始于",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "mge2exg7l",
+    "group": "8BU3",
+    "english": "folk art",
+    "chinese": "民间艺术",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "3oei6coqh",
+    "group": "8BU3",
+    "english": "at risk of",
+    "chinese": "有危险；冒风险",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "by655mj4f",
+    "group": "8BU3",
+    "english": "thank goodness",
+    "chinese": "谢天谢地",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "q8xh0s542",
+    "group": "8BU3",
+    "english": "die out",
+    "chinese": "灭绝；逐渐消失",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "0kyem4qfg",
+    "group": "8BU3",
+    "english": "in the shape of …",
+    "chinese": "呈......的形状",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "yrqictpa8",
+    "group": "8BU3",
+    "english": "make it",
+    "chinese": "幸免于难；渡过难关",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "pl2l0fewa",
+    "group": "8BU3",
+    "english": "do the voices of",
+    "chinese": "为......配音",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "vwdwjy2uc",
+    "group": "8BU3",
+    "english": "take one’s eyes off sth.",
+    "chinese": "把视线移开",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "75iq3r09l",
+    "group": "8BU3",
+    "english": "hold one’s breath",
+    "chinese": "屏住呼吸",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "881mbjffr",
+    "group": "8BU3",
+    "english": "neither … nor …",
+    "chinese": "既不......也不......",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "clwcxuhlh",
+    "group": "8BU3",
+    "english": "to the joy of sb.",
+    "chinese": "令某人高兴的是",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "nrp3cs81t",
+    "group": "8BU3",
+    "english": "watch out",
+    "chinese": "小心；留神",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "o867r2qn7",
+    "group": "8BU3",
+    "english": "look out",
+    "chinese": "小心；当心",
+    "type": "phrase",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "bty4vtwa6",
+    "group": "8BU3",
+    "english": "In this groundbreaking short film, Zhu Bajie and the other characters come to life on screen just like shadow puppets.",
+    "chinese": "在这部开创性的短片中，猪八戒和其他角色如同皮影一般在屏幕上栩栩如生。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "yysztyknv",
+    "group": "8BU3",
+    "english": "This short film was influenced by the famous artist Qi Baishi, and it looks exactly like a traditional ink painting.",
+    "chinese": "这部短片受著名画家齐白石的影响，看起来与传统水墨画一模一样。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "tivej15q7",
+    "group": "8BU3",
+    "english": "With the help of the latest computer technology, such as artificial intelligence (AI), film-makers are bringing the heroes from classic Chinese stories into the 21st century.",
+    "chinese": "借助人工智能等最新计算机技术，电影制作人正将中国经典故事中的主角们带入 21世纪。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "86zbspix9",
+    "group": "8BU3",
+    "english": "The oldest shadow puppet plays in China date back over 1,000 years. In shadow puppet plays, light and shadows are used to tell a story on a screen.",
+    "chinese": "中国最古老的皮影戏可追溯到 1000多年前。在皮影戏中，光影被用来在屏幕上讲故事。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  },
+  {
+    "id": "6fl8ev0bl",
+    "group": "8BU3",
+    "english": "However, neither Wang nor his friends are prepared to let this traditional folk art die out.",
+    "chinese": "然而，王(伟方)和他的朋友们都不愿让这项传统民间艺术就此消失。",
+    "type": "sentence",
+    "stage": 0,
+    "nextReviewDate": 1779539098351,
+    "easeFactor": 2.5
+  }
+]

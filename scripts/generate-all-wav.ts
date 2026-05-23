@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { DEFAULT_STUDY_DATA, slugify } from '../constants';
+import { loadPackagesData } from '../lib/packages';
+import { slugify } from '../constants';
 import { GoogleGenAI } from '@google/genai';
 
 // Simple WAV header creation

@@ -1,17 +1,18 @@
 import fs from 'fs';
 import path from 'path';
-import { DEFAULT_STUDY_DATA, assignAudioFileNames, slugify } from '../constants';
+import { loadPackagesData } from '../lib/packages';
+import { assignAudioFileNames, slugify } from '../constants';
 
 async function main() {
-  const outDir = path.join(process.cwd(), 'public', 'audio');
-  if (!fs.existsSync(outDir)) {
-    console.error('public/audio directory not found');
-    process.exit(1);
-  }
-
-  const items = assignAudioFileNames(DEFAULT_STUDY_DATA);
+  const items = assignAudioFileNames(loadPackagesData());
 
   for (const item of items) {
+    const outDir = path.join(process.cwd(), 'public', 'packages', item.group, 'audio');
+    if (!fs.existsSync(outDir)) {
+      console.log('[missing-dir]', outDir);
+      continue;
+    }
+
     const newName = item.audioFileName || `${slugify(item.english)}.mp3`;
     const slugName = `${slugify(item.english)}.mp3`;
     const newPath = path.join(outDir, newName);
