@@ -173,9 +173,7 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
                 {audioSource && (
                   <div className="mt-1 text-xs text-gray-500">音频来源: {audioSource === 'local' ? '本地文件' : audioSource === 'server-tts' ? '服务器 TTS' : audioSource === 'preloaded' ? '已缓存 (base64)' : audioSource === 'browser-tts' ? '浏览器 TTS (回退)' : '未知'}</div>
                 )}
-              {isRevealed && (
-                <h2 className="mt-3 text-xl md:text-2xl font-bold text-gray-800">{item.english}</h2>
-              )}
+              {/* 答案已在页面下方展示，移除波形上方重复显示 */}
             </div>
           </div>
 
