@@ -146,7 +146,9 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    // Use a generic handler for SPA fallback. Using app.use avoids path-to-regexp
+    // issues that can appear when bundling express/router with certain toolchains.
+    app.use((req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
