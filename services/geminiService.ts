@@ -14,6 +14,7 @@ export const getAudioUrlsForItem = (item: StudyItem): string[] => {
   const urls: string[] = [];
   for (const fileName of candidates) {
     urls.push(`/packages/${item.group}/audio/${fileName}`);
+    urls.push(`/audio/${fileName}`);
   }
   return urls;
 };
