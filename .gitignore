@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 tmp/
+# Generated packages index
+public/packages/index.json
