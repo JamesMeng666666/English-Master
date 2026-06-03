@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { StudyItem, StudyMode, ReviewGrade } from './types';
 import { INTERVALS, assignAudioFileNames } from './constants';
 import { parseContentWithGemini, playAudio, preloadAudio } from './services/geminiService';
+import { STATIC_PACKAGES_DATA } from './static-packages-data';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
 import Dictation from './components/Dictation';
@@ -32,7 +33,14 @@ function App() {
           defaultData = await res.json();
         }
       } catch (e) {
-        console.error('Failed to load package data:', e);
+        // Fallback to statically bundled data (works on CDN/static hosting without a backend)
+        console.warn('Failed to load package data from API, using bundled static data:', e);
+        defaultData = STATIC_PACKAGES_DATA;
+      }
+
+      // If API returned empty array, also fall back to static data
+      if (defaultData.length === 0) {
+        defaultData = STATIC_PACKAGES_DATA;
       }
 
       if (savedData) {

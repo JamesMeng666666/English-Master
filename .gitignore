@@ -26,3 +26,6 @@ dist-ssr
 tmp/
 # Generated packages index
 public/packages/index.json
+
+# Generated static data (bundled into production build at prebuild time)
+static-packages-data.ts
