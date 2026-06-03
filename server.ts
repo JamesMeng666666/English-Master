@@ -1,14 +1,14 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { createRequire } from "node:module";
 import { createServer as createViteServer } from "vite";
-
-const require = createRequire(import.meta.url);
-const { ZipArchive } = require("archiver");
-const googleTTS = require("google-tts-api");
+import * as archiverModule from "archiver";
+import * as googleTTS from "google-tts-api";
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { loadPackagesData, getPackageNames } from "./lib/packages";
+
+// archiver v8 exports ZipArchive at runtime, but @types/archiver v7 doesn't include it
+const { ZipArchive } = archiverModule as any;
 
 // Load .env.local into process.env (Vite does this for the client bundle, not for the server process)
 const envLocalPath = path.join(process.cwd(), '.env.local');
@@ -231,7 +231,8 @@ async function startServer() {
         if (existingFiles.has(fileName)) continue;
 
         try {
-          const url = googleTTS.getAudioUrl(item.english, { lang: 'en', slow: false, host: 'https://translate.google.com' });
+          const expandedText = expandTextForAudio(item.english);
+          const url = googleTTS.getAudioUrl(expandedText, { lang: 'en', slow: false, host: 'https://translate.google.com' });
           const ttsRes = await fetch(url);
           if (ttsRes.ok) {
             const buffer = Buffer.from(await ttsRes.arrayBuffer());

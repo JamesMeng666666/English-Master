@@ -35,7 +35,7 @@ async function main() {
   const group = groupArg ? groupArg.split('=')[1] : undefined;
   const filteredData = loadPackagesData(group);
   const itemsWithNames = assignAudioFileNames(filteredData);
-  const uniqueItems = Array.from(new Map(itemsWithNames.map(item => [item.english, item])).values());
+  const uniqueItems = Array.from(new Map(itemsWithNames.map(item => [`${item.group}:${item.english}`, item])).values());
 
   console.log(`Starting generation of ${uniqueItems.length} audio files${group ? ` for group ${group}` : ''}...`);
 
