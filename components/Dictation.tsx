@@ -62,31 +62,39 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
       try {
         const local = await findFirstAvailableAudioUrl(item);
         if (local) {
-          // fetch and decode to compute waveform and duration
+          // Try to decode audio for waveform visualization.
+          // If decoding fails, we can still play via the HTML <audio> element.
+          let decoded = false;
           try {
             const res = await fetch(local);
             if (res.ok) {
               const arrayBuffer = await res.arrayBuffer();
               const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
               if (AudioContextClass) {
-                const ctx = new AudioContextClass({ sampleRate: 24000 });
-                const audioBuffer = await new Promise<AudioBuffer>((resolve, reject) => {
-                  const promise = ctx.decodeAudioData(arrayBuffer, resolve, reject);
-                  if (promise) promise.catch(reject);
-                });
+                const ctx = new AudioContextClass();
+                try {
+                  // Use promise-based decodeAudioData (callback form is deprecated)
+                  const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+                  setDuration(audioBuffer.duration);
+                  setWaveformData(computeWaveform(audioBuffer));
+                  decoded = true;
+                } catch {
+                  // decode failed — waveform won't render but audio element can still play
+                }
                 await ctx.close();
-
-                setAudioUrl(local);
-                setDuration(audioBuffer.duration);
-                setWaveformData(computeWaveform(audioBuffer));
-                setAudioStatus('ready');
-                setAudioSource('local');
-                return;
               }
             }
-          } catch (e) {
-            // ignore and fallthrough
+          } catch {
+            // fetch or decode failed — audio element can still try to play
           }
+
+          setAudioUrl(local);
+          setAudioStatus('ready');
+          setAudioSource('local');
+          if (!decoded) {
+            setAudioMessage('音频文件已加载；波形渲染失败但可以正常播放');
+          }
+          return;
         }
 
         // try server TTS preload to see if server can generate
@@ -215,18 +223,30 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
             <div className="absolute inset-y-0 left-0 bg-primary/20" style={{ width: `${progress}%` }} />
             <div className="absolute inset-y-0 left-0 w-[2px] bg-primary" style={{ left: `${progress}%` }} />
             <div className="relative flex items-end h-full px-2 gap-1">
-              {waveformData.map((peak, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-300 rounded-sm"
-                  style={{ width: `${100 / waveformData.length}%`, height: `${Math.max(4, peak * 100)}%` }}
-                />
-              ))}
+              {waveformData.length > 0 ? (
+                waveformData.map((peak, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-300 rounded-sm"
+                    style={{ width: `${100 / waveformData.length}%`, height: `${Math.max(4, peak * 100)}%` }}
+                  />
+                ))
+              ) : (
+                <div className="flex items-end h-full w-full gap-1">
+                  {Array.from({ length: 80 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="bg-gray-300 rounded-sm"
+                      style={{ width: '1.25%', height: `${Math.max(8, Math.sin(i * 0.3) * 30 + 40)}%` }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-between text-xs text-gray-500">
             <span>{formatTime(currentTime)}</span>
-            <span>{formatTime(duration)}</span>
+            <span>{duration > 0 ? formatTime(duration) : '--:--'}</span>
           </div>
           <audio
             ref={audioRef}
@@ -235,6 +255,12 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
             onEnded={() => setIsPlaying(false)}
             onPause={() => setIsPlaying(false)}
             onPlay={() => setIsPlaying(true)}
+            onLoadedMetadata={(e) => {
+              // Use the audio element's duration when waveform decode failed
+              if (duration === 0 && e.currentTarget.duration && isFinite(e.currentTarget.duration)) {
+                setDuration(e.currentTarget.duration);
+              }
+            }}
           />
         </div>
       )}
@@ -280,14 +306,14 @@ export default function Dictation({ item, onComplete, onPlayAudio }: DictationPr
 
       <div className="w-full flex mt-auto gap-4">
         {isRevealed ? (
-          <button 
+          <button
             onClick={onComplete}
             className="flex-1 py-4 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-primary-dark transition-all transform hover:scale-[1.02] active:scale-[0.98]"
           >
             下一题 (Next)
           </button>
         ) : (
-          <button 
+          <button
             onClick={handleCheck}
             disabled={!userInput.trim()}
             className="flex-1 py-4 bg-gray-800 text-white font-bold rounded-xl hover:bg-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
