@@ -5,7 +5,7 @@ import { createServer as createViteServer } from "vite";
 import * as archiverModule from "archiver";
 import * as googleTTS from "google-tts-api";
 import { GoogleGenAI, Type, Modality } from "@google/genai";
-import { loadPackagesData, getPackageNames } from "./lib/packages";
+import { loadPackagesData, getPackageNames, resolvePackagesDir } from "./lib/packages";
 
 // archiver v8 exports ZipArchive at runtime, but @types/archiver v7 doesn't include it
 const { ZipArchive } = archiverModule as any;
@@ -181,7 +181,8 @@ async function startServer() {
   app.get("/api/download-package/:groupName", (req, res) => {
     try {
       const { groupName } = req.params;
-      const pkgDir = path.join(process.cwd(), 'public', 'packages', groupName);
+      const baseDir = resolvePackagesDir() || path.join(process.cwd(), 'public', 'packages');
+      const pkgDir = path.join(baseDir, groupName);
       if (!fs.existsSync(pkgDir)) {
         return res.status(404).json({ error: "Package not found" });
       }
@@ -215,7 +216,8 @@ async function startServer() {
       archive.append(JSON.stringify(items, null, 2), { name: `${groupName}/data.json` });
 
       // Include existing audio files from packages directory
-      const audioDir = path.join(process.cwd(), 'public', 'packages', groupName, 'audio');
+      const baseDir = resolvePackagesDir() || path.join(process.cwd(), 'public', 'packages');
+      const audioDir = path.join(baseDir, groupName, 'audio');
       const existingFiles = new Set<string>();
       if (fs.existsSync(audioDir)) {
         for (const file of fs.readdirSync(audioDir)) {
@@ -316,7 +318,21 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    // Use server-file-relative dist/ so static files work regardless of launch directory
+    let distPath = path.join(process.cwd(), 'dist');
+    if (!fs.existsSync(distPath)) {
+      // Fallback: server.mjs lives inside dist/, so serverDir = dist/
+      try {
+        const { fileURLToPath } = await import('url');
+        distPath = path.dirname(fileURLToPath((import.meta as any).url));
+      } catch {
+        /* keep cwd-relative */
+      }
+    }
+    if (!fs.existsSync(distPath)) {
+      console.error('dist/ directory not found. Static files will not be served.');
+      distPath = path.join(process.cwd(), 'dist'); // keep a default for the SPA fallback
+    }
     app.use(express.static(distPath));
     // Use a generic handler for SPA fallback. Using app.use avoids path-to-regexp
     // issues that can appear when bundling express/router with certain toolchains.
