@@ -3,6 +3,7 @@ import { StudyItem, StudyMode, ReviewGrade } from './types';
 import { INTERVALS, assignAudioFileNames } from './constants';
 import { parseContentWithGemini, playAudio, preloadAudio } from './services/geminiService';
 import { STATIC_PACKAGES_DATA } from './static-packages-data';
+import JSZip from 'jszip';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
 import Dictation from './components/Dictation';
@@ -259,17 +260,39 @@ function App() {
                       const btn = document.activeElement as HTMLButtonElement;
                       const origText = btn.textContent;
                       try {
-                        btn.textContent = '生成中...';
+                        btn.textContent = '打包中...';
                         btn.disabled = true;
 
-                        const res = await fetch('/api/download-package', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ groupName: selectedGroup, items })
-                        });
-                        if (!res.ok) throw new Error('Failed');
-                        const blob = await res.blob();
-                        const url = URL.createObjectURL(blob);
+                        const zip = new JSZip();
+                        const groupFolder = zip.folder(selectedGroup)!;
+
+                        // 1. Add data.json
+                        groupFolder.file('data.json', JSON.stringify(items, null, 2));
+
+                        // 2. Add audio files — fetch each existing audio file from the packages directory
+                        const audioDir = `packages/${selectedGroup}/audio`;
+                        const fetchedFiles = new Set<string>();
+
+                        for (const item of items) {
+                          if (!item.audioFileName) continue;
+                          const fileName = item.audioFileName;
+                          if (fetchedFiles.has(fileName)) continue;
+                          fetchedFiles.add(fileName);
+
+                          try {
+                            const audioUrl = `/${audioDir}/${fileName}`;
+                            const res = await fetch(audioUrl);
+                            if (res.ok) {
+                              const blob = await res.blob();
+                              groupFolder.file(`audio/${fileName}`, blob);
+                            }
+                          } catch {
+                            // Skip missing audio files
+                          }
+                        }
+
+                        const zipBlob = await zip.generateAsync({ type: 'blob' });
+                        const url = URL.createObjectURL(zipBlob);
                         const a = document.createElement('a');
                         a.href = url;
                         a.download = `${selectedGroup}.zip`;
