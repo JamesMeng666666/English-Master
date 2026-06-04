@@ -3,7 +3,6 @@ import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import * as archiverModule from "archiver";
-import * as googleTTS from "google-tts-api";
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { loadPackagesData, getPackageNames, resolvePackagesDir } from "./lib/packages";
 
@@ -37,6 +36,35 @@ const expandTextForAudio = (text: string): string => {
   expanded = expanded.replace(/\bvs\.?\b/gi, "versus");
   return expanded;
 };
+
+/** Wrap raw PCM data in a WAV file header so it's playable everywhere. */
+function pcmToWav(pcm: Buffer, sampleRate: number, numChannels: number, bitsPerSample: number): Buffer {
+  const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+  const blockAlign = numChannels * (bitsPerSample / 8);
+  const dataSize = pcm.length;
+  const headerSize = 44;
+  const buf = Buffer.alloc(headerSize + dataSize);
+
+  // RIFF header
+  buf.write('RIFF', 0);
+  buf.writeUInt32LE(36 + dataSize, 4);
+  buf.write('WAVE', 8);
+  // fmt chunk
+  buf.write('fmt ', 12);
+  buf.writeUInt32LE(16, 16);          // chunk size
+  buf.writeUInt16LE(1, 20);           // PCM format
+  buf.writeUInt16LE(numChannels, 22);
+  buf.writeUInt32LE(sampleRate, 24);
+  buf.writeUInt32LE(byteRate, 28);
+  buf.writeUInt16LE(blockAlign, 32);
+  buf.writeUInt16LE(bitsPerSample, 34);
+  // data chunk
+  buf.write('data', 36);
+  buf.writeUInt32LE(dataSize, 40);
+  pcm.copy(buf, 44);
+
+  return buf;
+}
 
 async function startServer() {
   const app = express();
@@ -205,6 +233,7 @@ async function startServer() {
     try {
       const { groupName, items } = req.body;
       if (!groupName || !items || !Array.isArray(items)) return res.status(400).json({ error: "Invalid data" });
+      const apiKey = process.env.GEMINI_API_KEY;
 
       res.setHeader('Content-Type', 'application/zip');
       res.setHeader('Content-Disposition', `attachment; filename="${groupName}.zip"`);
@@ -226,28 +255,52 @@ async function startServer() {
         }
       }
 
-      // Generate missing audio via Google Translate TTS
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const fileName = item.audioFileName || `${item.english.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40)}.mp3`;
-        if (existingFiles.has(fileName)) continue;
+      // Generate missing audio via Gemini TTS
+      if (apiKey) {
+        const ai = new GoogleGenAI({
+          apiKey,
+          httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+        });
 
-        try {
-          const expandedText = expandTextForAudio(item.english);
-          const url = googleTTS.getAudioUrl(expandedText, { lang: 'en', slow: false, host: 'https://translate.google.com' });
-          const ttsRes = await fetch(url);
-          if (ttsRes.ok) {
-            const buffer = Buffer.from(await ttsRes.arrayBuffer());
-            archive.append(buffer, { name: `${groupName}/audio/${fileName}` });
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const fileName = item.audioFileName || `${item.english.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40)}.mp3`;
+          if (existingFiles.has(fileName)) continue;
+
+          try {
+            const expandedText = expandTextForAudio(item.english);
+            const ttsResponse = await ai.models.generateContent({
+              model: "gemini-3.1-flash-tts-preview",
+              contents: [{ parts: [{ text: `Say clearly: ${expandedText}` }] }],
+              config: {
+                responseModalities: [Modality.AUDIO],
+                speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } },
+              }
+            });
+
+            const base64Audio = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+            if (base64Audio) {
+              const pcmBuffer = Buffer.from(base64Audio, 'base64');
+
+              // Wrap 16-bit 24000 Hz mono PCM in a WAV container for universal playback
+              const wavBuffer = pcmToWav(pcmBuffer, 24000, 1, 16);
+              const wavFileName = fileName.replace(/\.mp3$/, '.wav');
+
+              archive.append(wavBuffer, { name: `${groupName}/audio/${wavFileName}` });
+
+              // Save to disk for future downloads
+              if (!fs.existsSync(audioDir)) {
+                fs.mkdirSync(audioDir, { recursive: true });
+              }
+              fs.writeFileSync(path.join(audioDir, wavFileName), wavBuffer);
+              console.log(`Generated: ${wavFileName}`);
+            }
+          } catch (e) {
+            console.error(`TTS failed for "${item.english}":`, (e as any)?.message || e);
           }
-        } catch (e) {
-          console.error(`TTS failed for: ${item.english}`);
         }
-
-        // Delay to avoid rate limiting
-        if (i < items.length - 1) {
-          await new Promise(r => setTimeout(r, 1500));
-        }
+      } else {
+        console.warn('No GEMINI_API_KEY configured — skipping audio generation for download');
       }
 
       archive.finalize();
