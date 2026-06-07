@@ -129,6 +129,37 @@ Rules:
   }));
 };
 
+export const translateChineseToEnglish = async (chineseText: string, apiKey: string): Promise<string> => {
+  const prompt = `Translate the following Chinese sentence into natural, fluent English. Provide only the English translation without additional commentary.\n\n${chineseText}`;
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          { role: 'user', parts: [{ text: prompt }] }
+        ],
+        generationConfig: {
+          responseMimeType: 'text/plain'
+        }
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    const translated = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!translated) throw new Error('Empty translation result');
+    return translated.trim();
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const fetchTTSAudio = async (text: string, apiKey: string): Promise<string | null> => {
   try {
     const expanded = expandTextForAudio(text);

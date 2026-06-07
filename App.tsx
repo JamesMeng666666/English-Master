@@ -9,6 +9,7 @@ import Quiz from './components/Quiz';
 import Dictation from './components/Dictation';
 import VocabularyList from './components/VocabularyList';
 import ApiKeyModal from './components/ApiKeyModal';
+import Translate from './components/Translate';
 
 function App() {
   const [studyData, setStudyData] = useState<StudyItem[]>([]);
@@ -368,6 +369,19 @@ function App() {
               </button>
 
               <button
+                onClick={() => { setMode(StudyMode.TRANSLATE); setCurrentCardIndex(0); }}
+                className="bg-white border-2 border-indigo-200 hover:border-indigo-300 text-gray-800 p-4 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-row md:flex-col items-center justify-start md:justify-center gap-4 group text-left md:text-center"
+              >
+                 <div className="bg-indigo-100 p-3 md:p-4 rounded-full shrink-0 group-hover:bg-indigo-500 group-hover:text-white transition-colors text-indigo-500">
+                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14m7-7H5"></path></svg>
+                </div>
+                 <div>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">句子翻译 (Translate)</h3>
+                    <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">汉译英 (Chinese → English)</p>
+                </div>
+              </button>
+
+              <button
                 onClick={() => setMode(StudyMode.LIST)}
                 className="bg-white border-2 border-gray-100 hover:border-gray-300 text-gray-800 p-4 md:p-8 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-row md:flex-col items-center justify-start md:justify-center gap-4 group text-left md:text-center"
               >
@@ -483,6 +497,11 @@ function App() {
                     <button onClick={() => setMode(StudyMode.DASHBOARD)} className="px-6 py-3 bg-primary text-white rounded-xl shadow-md hover:bg-primary-dark transition-colors font-medium">返回仪表盘 (Back to Dashboard)</button>
                 </div>
              )}
+          </div>
+        )}
+        {mode === StudyMode.TRANSLATE && (
+          <div className="w-full max-w-4xl flex flex-col items-center justify-center min-h-[60vh]">
+            <Translate items={studyData} selectedGroup={selectedGroup} onBack={() => setMode(StudyMode.DASHBOARD)} onAddItem={(item) => { setStudyData(prev => assignAudioFileNames([item, ...prev])); }} />
           </div>
         )}
         

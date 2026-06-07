@@ -8,6 +8,7 @@ export enum CardStatus {
 export enum StudyMode {
   FLASHCARD = 'FLASHCARD',
   QUIZ = 'QUIZ',
+  TRANSLATE = 'TRANSLATE',
   INPUT = 'INPUT',
   DASHBOARD = 'DASHBOARD',
   LIST = 'LIST',
